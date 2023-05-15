@@ -14,15 +14,32 @@ import {
   XMarkIcon,
 } from '@heroicons/react/24/outline'
 import { ChevronDownIcon, MagnifyingGlassIcon } from '@heroicons/react/20/solid'
+import Link from 'next/link'
 
 const navigation = [
-  { name: 'Dashboard', href: '#', icon: HomeIcon, current: true },
-  { name: 'Portfolio', href: '#', icon: FolderIcon, current: false },
-  { name: 'Market', href: '#', icon: UsersIcon, current: false },
-  { name: 'Calendar', href: '#', icon: CalendarIcon, current: false },
-  { name: 'Documents', href: '#', icon: DocumentDuplicateIcon, current: false },
-  { name: 'Reports', href: '#', icon: ChartPieIcon, current: false },
+  { name: 'Dashboard', href: '/app', icon: HomeIcon, current: true },
+  {
+    name: 'Portfolio',
+    href: '/app/portfolio',
+    icon: FolderIcon,
+    current: false,
+  },
+  { name: 'Trade', href: '/app/trade', icon: UsersIcon, current: false },
+  {
+    name: 'Trade History',
+    href: '/app/trade-history',
+    icon: CalendarIcon,
+    current: false,
+  },
+  {
+    name: 'Documents',
+    href: '/app/documents',
+    icon: DocumentDuplicateIcon,
+    current: false,
+  },
+  { name: 'Reports', href: '/app/reports', icon: ChartPieIcon, current: false },
 ]
+
 const teams = [
   { id: 1, name: 'Stocks', href: '#', initial: 'S', current: false },
   {
@@ -33,17 +50,32 @@ const teams = [
     current: false,
   },
 ]
+
 const userNavigation = [
   { name: 'Your profile', href: '#' },
   { name: 'Sign out', href: '#' },
 ]
 
-function classNames(...classes) {
+function classNames(...classes: any[]) {
   return classes.filter(Boolean).join(' ')
 }
 
 export default function Nav() {
   const [sidebarOpen, setSidebarOpen] = useState(false)
+  const [navItems, setNavItems] = useState(navigation)
+
+  const navClickHandler = (e: any) => {
+    navItems.forEach((item) => {
+      item.current = false
+    })
+    setNavItems((prevState: any) => {
+      return prevState.forEach((item: any) =>
+        item.name === e.target.text
+          ? (item.current = true)
+          : (item.current = false)
+      )
+    })
+  }
 
   return (
     <>
@@ -182,7 +214,7 @@ export default function Nav() {
       {/* Static sidebar for desktop */}
       <div className='hidden lg:fixed lg:inset-y-0 lg:z-50 lg:flex lg:w-72 lg:flex-col'>
         {/* Sidebar component, swap this element with another sidebar if you like */}
-        <div className='flex grow flex-col gap-y-5 overflow-y-auto bg-gray-900 px-6 pb-4'>
+        <div className='flex grow flex-col gap-y-5 overflow-y-auto bg-lunarship-gray-300 px-6 pb-4'>
           <div className='flex h-16 shrink-0 items-center'>
             <img className='h-8 w-auto' src='/spaceship.png' alt='lunarship' />
           </div>
@@ -195,8 +227,9 @@ export default function Nav() {
                 <ul role='list' className='-mx-2 space-y-1'>
                   {navigation.map((item) => (
                     <li key={item.name}>
-                      <a
+                      <Link
                         href={item.href}
+                        onClick={navClickHandler}
                         className={classNames(
                           item.current
                             ? 'bg-slate-800 text-white'
@@ -209,7 +242,7 @@ export default function Nav() {
                           aria-hidden='true'
                         />
                         {item.name}
-                      </a>
+                      </Link>
                     </li>
                   ))}
                 </ul>
@@ -257,7 +290,7 @@ export default function Nav() {
       </div>
 
       <div className='lg:pl-72'>
-        <div className='sticky top-0 z-40 flex h-16 shrink-0 items-center gap-x-4 border-b border-gray-200/20 bg-slate-800 px-4 shadow-sm sm:gap-x-6 sm:px-6 lg:px-8'>
+        <div className='sticky top-0 z-40 flex h-16 shrink-0 items-center gap-x-4 border-b border-gray-200/20 bg-lunarship-gray-200 px-4 shadow-sm sm:gap-x-6 sm:px-6 lg:px-8'>
           <button
             type='button'
             className='-m-2.5 p-2.5 text-gray-400 hover:text-white lg:hidden'
@@ -274,11 +307,7 @@ export default function Nav() {
           />
 
           <div className='flex flex-1 gap-x-4 self-stretch lg:gap-x-6'>
-            <form
-              className='relative flex flex-1 text-gray-400 hover:text-white active:text-white'
-              action='#'
-              method='GET'
-            >
+            <form className='relative flex flex-1 text-gray-400 hover:text-white active:text-white'>
               <label htmlFor='search-field' className='sr-only'>
                 Search
               </label>
@@ -288,7 +317,7 @@ export default function Nav() {
               />
               <input
                 id='search-field'
-                className='block h-full w-full border-0 bg-slate-800 py-0 pl-8 pr-0 text-white placeholder:text-gray-400 focus:ring-0 sm:text-sm'
+                className='block h-full w-full border-0 bg-transparent py-0 pl-8 pr-0 text-white placeholder:text-gray-400 focus:ring-0 sm:text-sm'
                 placeholder='Search...'
                 type='search'
                 name='search'

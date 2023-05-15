@@ -12,11 +12,9 @@ export const metadata = {
 }
 export default function AppLayout({ children }: { children: React.ReactNode }) {
   return (
-    <section className={`${titillium.className} relative`}>
+    <section className={`${titillium.className}`}>
       <Nav />
-      <div className='absolute h-[100dvh] w-full bg-slate-800 lg:pl-72'>
-        {children}
-      </div>
+      <div className='isolate h-[calc(100dvh-4rem)] lg:pl-72'>{children}</div>
     </section>
   )
 }

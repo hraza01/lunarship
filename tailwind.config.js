@@ -12,6 +12,13 @@ module.exports = {
         'gradient-conic':
           'conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))',
       },
+      colors: {
+        'lunarship-gray': {
+          100: '#252E39',
+          200: '#1D2530',
+          300: '#191F2A',
+        },
+      },
     },
   },
   plugins: [require('@tailwindcss/forms')],
