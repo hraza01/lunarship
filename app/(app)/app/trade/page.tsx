@@ -63,16 +63,15 @@ export default function Trade() {
     },
   ]
 
-  const socket = new WebSocket(process.env.NEXT_PUBLIC_ALPACA_WS)
-
   const [ticker, setTicker] = useState('AAPL')
   const [recentTransactions, setRecentTransactions] = useState([...tradeData])
   const [quotes, setQuotes] = useState([...quoteData])
-  const [tickerInformation, setTickerInformation] = useState('')
+  const [tickerInformation, setTickerInformation] = useState({})
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
     // live data
+    const socket = new WebSocket(process.env.NEXT_PUBLIC_ALPACA_WS)
     alpacaConnect(socket)
     socket.onmessage = function (event) {
       const response = JSON.parse(event.data)
@@ -80,12 +79,12 @@ export default function Trade() {
 
       response[0].T === 't' &&
         setRecentTransactions((prevState) => {
-          return [...prevState, ...response]
+          return [...response, ...prevState]
         })
 
       response[0].T === 'q' &&
         setQuotes((prevState) => {
-          return [...prevState, ...response]
+          return [...response, ...prevState]
         })
     }
 
@@ -96,23 +95,27 @@ export default function Trade() {
       setTickerInformation(data)
     }
 
-    const request = JSON.stringify({
+    const subscribe = JSON.stringify({
       action: 'subscribe',
       trades: [ticker],
       quotes: [ticker],
     })
 
-    getTickerInformation().then(() => setLoading(false))
-    socket.readyState && socket.send(request)
+    getTickerInformation().then(() => {
+      socket.send(subscribe)
+      setLoading(false)
+    })
+
+    // socket.readyState ?? socket.send(request)
 
     return () => {
-      const request = JSON.stringify({
+      const unsubscribe = JSON.stringify({
         action: 'unsubscribe',
         trades: [ticker],
         quotes: [ticker],
       })
 
-      socket.readyState && socket.send(request) && socket.close()
+      socket.readyState && socket.send(unsubscribe) && socket.close()
     }
   }, [ticker])
 
