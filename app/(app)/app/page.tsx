@@ -23,10 +23,10 @@ export default function Dashboard() {
     'clearing_broker',
   ]
 
-  sessionStorage.setItem('accountId', '0d178bce-9019-40c3-9841-29544381d812')
-  const accountId = sessionStorage.getItem('accountId')
-
   useEffect(() => {
+    sessionStorage.setItem('accountId', '0d178bce-9019-40c3-9841-29544381d812')
+    const accountId = sessionStorage.getItem('accountId')
+
     async function getAccountBalance() {
       const res = await fetch(`/api/dashboard/${accountId}`)
       const data = await res.json()
@@ -62,23 +62,21 @@ export default function Dashboard() {
     allPromise.then(() => {
       setLoading(false)
     })
-  }, [accountId])
+  }, [])
 
   if (loading) {
     return (
-      <main className='flex h-full w-full flex-col bg-lunarship-gray-200 text-white lg:flex-row'>
-        <div className='flex w-full flex-col gap-4 p-4'>
-          <div className='flex h-[50rem] w-full items-center justify-center rounded border border-gray-400'>
-            <Spinner color='purple' aria-label='Purple spinner example' />
-          </div>
+      <main className='flex h-full w-full text-white lg:flex-row'>
+        <div className='inset-0 flex w-full items-center justify-center rounded border border-gray-400 p-4'>
+          <Spinner color='purple' aria-label='Purple spinner example' />
         </div>
       </main>
     )
   }
 
   return (
-    <main className='flex w-full flex-col bg-lunarship-gray-200 text-white lg:flex-row'>
-      <div className='w-full p-4'>
+    <main className='flex w-full flex-col justify-between bg-lunarship-gray-200 text-white lg:flex-row'>
+      <div className='h-full w-full p-4'>
         <div className='flex w-full flex-col justify-between gap-8 rounded py-6 pb-10 lg:flex-row'>
           <div className='flex min-w-fit flex-col items-start justify-center gap-1.5 rounded bg-white/5 py-6 pl-6 pr-16'>
             <p className='text-base font-bold text-indigo-400'>Total Equity</p>
