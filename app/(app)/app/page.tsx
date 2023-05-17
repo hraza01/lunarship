@@ -2,9 +2,11 @@
 import { useEffect, useState } from 'react'
 import { parseISO, fromUnixTime, format } from 'date-fns'
 import ChartComponent from '@/app/(app)/app/ChartComponent'
+import Link from 'next/link'
+import { Spinner } from 'flowbite-react'
 
 export default function Dashboard() {
-  const [loading, setLoading] = useState(false)
+  const [loading, setLoading] = useState(true)
   const [accountBalance, setAccountBalance] = useState([])
   const [accountValue, setAccountValue] = useState('')
   const [accountDetails, setAccountDetails] = useState({})
@@ -67,7 +69,7 @@ export default function Dashboard() {
       <main className='flex h-full w-full flex-col bg-lunarship-gray-200 text-white lg:flex-row'>
         <div className='flex w-full flex-col gap-4 p-4'>
           <div className='flex h-[50rem] w-full items-center justify-center rounded border border-gray-400'>
-            Spinner
+            <Spinner color='purple' aria-label='Purple spinner example' />
           </div>
         </div>
       </main>
@@ -123,7 +125,7 @@ export default function Dashboard() {
                   member since
                 </p>
                 <p>
-                  {/*{format(parseISO(accountDetails?.created_at), 'MMM dd, yyyy')}*/}
+                  {format(parseISO(accountDetails?.created_at), 'MMM dd, yyyy')}
                 </p>
               </div>
             </div>
@@ -131,7 +133,7 @@ export default function Dashboard() {
         </div>
         <div className='col-span-2 flex h-1/2 w-full flex-col gap-2'>
           <h3 className='font-bold'>Financial News</h3>
-          <div className='text-white '>
+          <div className='pb-8 text-white'>
             <div className='grid grid-cols-7 items-center gap-4 rounded-t border-b border-gray-400 bg-white/5 px-10 py-2.5 text-base uppercase text-gray-300'>
               <p className='font-bold uppercase text-gray-100'>source</p>
               <p className='font-bold uppercase text-gray-100'>author</p>
@@ -150,12 +152,16 @@ export default function Dashboard() {
                 >
                   <p className='uppercase'>{article.source}</p>
                   <p>{article.author}</p>
-                  <a className='col-span-2 text-indigo-400' href={article.url}>
+                  <Link
+                    className='col-span-2 text-indigo-400'
+                    href={article.url}
+                    target='_blank'
+                  >
                     {article.headline}
-                  </a>
+                  </Link>
                   <p>{format(parseISO(article.created_at), 'MMM dd, yyyy')}</p>
                   <p>{format(parseISO(article.updated_at), 'MMM dd, yyyy')}</p>
-                  <div className='flex gap-2'>
+                  <div className='flex flex-wrap gap-2'>
                     {article.symbols.map((symbol, index) => (
                       <p key={index}>{symbol}</p>
                     ))}

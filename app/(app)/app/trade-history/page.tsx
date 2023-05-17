@@ -1,6 +1,7 @@
 'use client'
 import { useEffect, useState } from 'react'
 import { parseISO, format } from 'date-fns'
+import { Spinner } from 'flowbite-react'
 export default function TradeHistory() {
   const [loading, setLoading] = useState(true)
   const [trades, setTrades] = useState([])
@@ -26,7 +27,7 @@ export default function TradeHistory() {
         <div className='flex w-full flex-col gap-4 p-4'>
           <h3 className='font-bold'>Trade History</h3>
           <div className='flex h-[50rem] w-full items-center justify-center rounded border border-gray-400'>
-            Spinner
+            <Spinner color='purple' aria-label='Purple spinner example' />
           </div>
         </div>
       </main>

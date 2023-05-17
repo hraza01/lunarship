@@ -6,6 +6,7 @@ import TickerInformation from '@/app/(app)/app/trade/TickerInformation'
 import RecentTransactions from '@/app/(app)/app/trade/RecentTransactions'
 import QuotesPanel from '@/app/(app)/app/trade/QuotesPanel'
 import TransactionPanel from '@/app/(app)/app/trade/TransactionPanel'
+import { Spinner } from 'flowbite-react'
 
 export default function Trade() {
   // test data
@@ -121,8 +122,8 @@ export default function Trade() {
 
   if (loading)
     return (
-      <main className='flex h-full w-full flex-col bg-lunarship-gray-200 lg:flex-row'>
-        Spinner
+      <main className='flex h-full w-full flex-col items-center justify-center bg-lunarship-gray-200 lg:flex-row'>
+        <Spinner color='purple' aria-label='Purple spinner example' />
       </main>
     )
 
