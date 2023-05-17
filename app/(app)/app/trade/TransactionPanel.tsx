@@ -6,22 +6,29 @@ function classNames(...classes: any[]) {
   return classes.filter(Boolean).join(' ')
 }
 
-export default function TransactionPanel({ TradeItem }) {
+// @ts-ignore
+export default function TransactionPanel({ ticker }) {
+  const [side, setSide] = useState('buy')
   const [price, setPrice] = useState('')
   const [quantity, setQuantity] = useState('')
   const [orderType, setOrderType] = useState('')
   const [duration, setDuration] = useState('')
 
-  const orders = ['buy', 'sell']
+  const sides = ['buy', 'sell']
+
+  function submitHandler(e) {
+    console.log(side, ticker, price, quantity, orderType, duration)
+    console.log(e)
+  }
 
   return (
     <div className='w-full sm:px-0 lg:max-w-md'>
       <Tab.Group>
         <Tab.List className='flex space-x-1 rounded-xl bg-blue-900/20'>
-          {orders.map((order) => (
+          {sides.map((side) => (
             <Tab
-              key={order}
-              onClick={() => setOrderType(order)}
+              key={side}
+              onClick={() => setSide(side)}
               className={({ selected }) =>
                 classNames(
                   'w-full rounded-lg py-1.5 text-sm font-medium leading-5 text-blue-700',
@@ -32,12 +39,12 @@ export default function TransactionPanel({ TradeItem }) {
                 )
               }
             >
-              {order}
+              {side}
             </Tab>
           ))}
         </Tab.List>
         <Tab.Panels className='mt-8'>
-          <form className='flex flex-col gap-4'>
+          <form className='flex flex-col gap-4' onSubmit={submitHandler}>
             <div className='flex flex-col gap-2'>
               <label className='text-xs text-gray-400' htmlFor='orderType'>
                 Order Type

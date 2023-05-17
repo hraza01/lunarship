@@ -3,7 +3,7 @@ import React, { useEffect, useRef } from 'react'
 
 let tvScriptLoadingPromise: any
 
-export default function Chart({ TradeItem }) {
+export default function Chart({ ticker }) {
   const onLoadScriptRef: any = useRef()
 
   useEffect((): any => {
@@ -33,7 +33,7 @@ export default function Chart({ TradeItem }) {
       ) {
         new window.TradingView.widget({
           autosize: true,
-          symbol: TradeItem,
+          symbol: ticker,
           interval: 'M',
           timezone: 'Etc/UTC',
           theme: 'dark',
@@ -49,5 +49,5 @@ export default function Chart({ TradeItem }) {
     }
   }, [])
 
-  return <div key={TradeItem} id='tradingview-chart' className='h-full' />
+  return <div key={ticker} id='tradingview-chart' className='h-full' />
 }
