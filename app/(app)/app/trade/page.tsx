@@ -71,7 +71,7 @@ export default function Trade({ searchParams }) {
       <div className='min-h-[50dvh] flex-grow lg:h-full lg:min-h-full lg:w-4/5'>
         <Chart ticker={ticker} />
       </div>
-      <div className='grid grid-cols-1 gap-2 bg-lunarship-gray-300 p-4 align-bottom lg:w-full lg:max-w-xs'>
+      <div className='grid grid-cols-1 gap-0.5 gap-2 bg-lunarship-gray-300 p-4 align-bottom lg:w-full lg:max-w-xs'>
         <div>
           <h4 className='mb-2 text-xs font-semibold text-gray-400'>
             Information
@@ -82,13 +82,13 @@ export default function Trade({ searchParams }) {
           <h4 className='mb-2 text-xs font-semibold text-gray-400'>
             Recent Transactions
           </h4>
-          <RecentTransactions transactions={recentTransactions.slice(0, 6)} />
+          <RecentTransactions transactions={recentTransactions.slice(0, 5)} />
         </div>
         <div>
           <h4 className='mb-2 text-xs font-semibold text-gray-400'>
             Live Quotes
           </h4>
-          <QuotesPanel quotes={quotes.slice(0, 6)} />
+          <QuotesPanel quotes={quotes.slice(0, 5)} />
         </div>
         <div className='self-end'>
           <h4 className='mb-2 text-xs font-semibold text-gray-400'>Orders</h4>
