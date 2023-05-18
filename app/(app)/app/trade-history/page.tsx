@@ -11,7 +11,7 @@ export default function TradeHistory() {
 
   useEffect(() => {
     async function getTradeHistory() {
-      const res = await fetch(`/api/trade-history/${accountId}`)
+      const res = await fetch(`/api/trading/${accountId}`)
       const data = await res.json()
 
       setTrades(data)

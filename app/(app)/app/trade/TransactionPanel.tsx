@@ -16,9 +16,32 @@ export default function TransactionPanel({ ticker }) {
 
   const sides = ['buy', 'sell']
 
-  function submitHandler(e) {
-    console.log(side, ticker, price, quantity, orderType, duration)
-    console.log(e)
+  async function submitHandler(e) {
+    e.preventDefault()
+
+    const payload = {
+      symbol: ticker,
+      price: parseFloat(price).toFixed(2),
+      qty: Math.round(quantity),
+      side: side,
+      type: orderType,
+      time_in_force: duration,
+    }
+
+    const accountId = sessionStorage.getItem('accountId')
+    const url = `/api/trading/${accountId}`
+    const options = {
+      method: 'POST',
+      body: JSON.stringify(payload),
+    }
+
+    orderType.toLowerCase() === 'market' && delete payload['price']
+
+    console.log('request', payload)
+
+    const res = await fetch(url, options)
+    const data = await res.json()
+    console.log('response', data)
   }
 
   return (
@@ -56,7 +79,7 @@ export default function TransactionPanel({ ticker }) {
                 value={orderType}
                 onChange={(e) => setOrderType(e.target.value)}
               >
-                <option value='' disabled selected>
+                <option value='' disabled>
                   Please select
                 </option>
                 <option value='market'>Market</option>
@@ -113,7 +136,7 @@ export default function TransactionPanel({ ticker }) {
                 value={duration}
                 onChange={(e) => setDuration(e.target.value)}
               >
-                <option value='' disabled selected>
+                <option value='' disabled>
                   Please select
                 </option>
                 <option value='gtc'>Good Until Cancelled</option>

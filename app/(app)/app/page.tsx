@@ -1,7 +1,8 @@
 'use client'
 import { useEffect, useState } from 'react'
 import { parseISO, fromUnixTime, format } from 'date-fns'
-import ChartComponent from '@/app/(app)/app/ChartComponent'
+import { formatNumber } from '@/utils/helpers'
+import Chart from '@/app/(app)/app/Chart'
 import Link from 'next/link'
 import { Spinner } from 'flowbite-react'
 
@@ -28,7 +29,7 @@ export default function Dashboard() {
     const accountId = sessionStorage.getItem('accountId')
 
     async function getAccountBalance() {
-      const res = await fetch(`/api/dashboard/${accountId}`)
+      const res = await fetch(`/api/account/${accountId}/portfolio`)
       const data = await res.json()
 
       setAccountValue(data.base_value)
@@ -80,29 +81,35 @@ export default function Dashboard() {
         <div className='flex w-full flex-col justify-between gap-8 rounded py-6 pb-10 lg:flex-row'>
           <div className='flex min-w-fit flex-col items-start justify-center gap-1.5 rounded bg-white/5 py-6 pl-6 pr-16'>
             <p className='text-base font-bold text-indigo-400'>Total Equity</p>
-            <p className='text-4xl'>${accountValue}</p>
+            <p className='text-4xl'>{formatNumber(accountValue)}</p>
           </div>
           <div className='flex min-w-fit flex-col items-start justify-center gap-1.5 rounded bg-white/5 py-6 pl-6 pr-16'>
             <p className='text-base font-bold text-indigo-400'>Buying Power</p>
-            <p className='text-4xl'>${accountDetails.buying_power}</p>
+            <p className='text-4xl'>
+              {formatNumber(accountDetails.buying_power)}
+            </p>
           </div>
           <div className='flex min-w-fit flex-col items-start justify-center gap-1.5 rounded bg-white/5 py-6 pl-6 pr-16'>
             <p className='text-base font-bold text-indigo-400'>
               Pending Transfers Out
             </p>
-            <p className='text-4xl'>${accountDetails.pending_transfer_out}</p>
+            <p className='text-4xl'>
+              {formatNumber(accountDetails.pending_transfer_out)}
+            </p>
           </div>
           <div className='flex min-w-fit flex-col items-start justify-center gap-1.5 rounded bg-white/5 py-6 pl-6 pr-16'>
             <p className='text-base font-bold text-indigo-400'>
               Pending Transfers In
             </p>
-            <p className='text-4xl'>${accountDetails.pending_transfer_in}</p>
+            <p className='text-4xl'>
+              {formatNumber(accountDetails.pending_transfer_in)}
+            </p>
           </div>
         </div>
         <div className='mb-2 grid h-1/2 grid-cols-2 gap-4'>
           <div className='flex max-h-96 w-full flex-col gap-2'>
             <h3 className='font-bold'>Account Balance</h3>
-            <ChartComponent data={accountBalance}></ChartComponent>
+            <Chart data={accountBalance}></Chart>
           </div>
           <div className='flex w-full flex-col gap-2'>
             <h3 className='font-bold'>Account Information</h3>
@@ -115,7 +122,11 @@ export default function Dashboard() {
                   <p className='font-bold uppercase text-gray-100'>
                     {item.replace('_', ' ')}
                   </p>
-                  <p>{accountDetails[item]}</p>
+                  <p>
+                    {item !== 'cash'
+                      ? accountDetails[item]
+                      : formatNumber(accountDetails[item])}
+                  </p>
                 </div>
               ))}
               <div className='flex items-center justify-between rounded bg-white/5 px-6 py-4 text-base uppercase text-gray-300'>
