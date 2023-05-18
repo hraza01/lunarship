@@ -4,7 +4,7 @@ function classNames(...classes) {
 
 export default function Stats({ stats }) {
   return (
-    <dl className='mx-auto mb-8 grid grid-cols-1 gap-2 bg-gray-900/5 sm:grid-cols-2 lg:grid-cols-4'>
+    <dl className='grid grid-cols-1 gap-2 bg-gray-900/5 sm:grid-cols-2 lg:grid-cols-4'>
       {stats.map((stat) => (
         <div
           key={stat.name}

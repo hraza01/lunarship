@@ -22,7 +22,6 @@ export default function Dashboard() {
   ]
 
   const accountInformationKeys = [
-    'status',
     'daytrade_count',
     'crypto_status',
     'account_number',
@@ -93,21 +92,25 @@ export default function Dashboard() {
   }
 
   return (
-    <main className='flex w-full flex-col justify-between bg-lunarship-gray-200 text-white lg:flex-row'>
-      <div className='h-full w-full p-4'>
+    <main className='w-full bg-lunarship-gray-200 text-white'>
+      <div className='flex h-full w-full flex-col gap-8 p-4'>
         <Stats stats={stats} />
-        <div className='mb-16 flex h-1/2 flex-col gap-4 lg:grid lg:grid-cols-2'>
-          <div className='flex max-h-96 w-full flex-col gap-2'>
+        <div className='flex flex-col gap-4 lg:grid lg:grid-cols-2'>
+          <div className='flex h-[24rem] w-full flex-col gap-2'>
             <h3 className='font-bold'>Account Balance</h3>
             <Chart data={accountBalance}></Chart>
           </div>
-          <div className='flex w-full flex-col gap-2'>
+          <div className='flex h-[24rem] w-full flex-col gap-2'>
             <h3 className='font-bold'>Account Information</h3>
-            <div className='grid w-full grid-cols-2 justify-items-stretch gap-1 rounded text-gray-100'>
+            <div className='align grid grid-cols-2 justify-items-stretch gap-8 rounded bg-white/5 p-4 text-gray-100'>
+              <div className='col-span-2 flex items-center justify-between rounded px-6 py-3 text-sm uppercase text-gray-300'>
+                <p className='font-bold uppercase text-gray-100'>status</p>
+                <p className='text-indigo-500'>{accountDetails.status}</p>
+              </div>
               {accountInformationKeys.map((item, index) => (
                 <div
                   key={index}
-                  className='flex items-center justify-between rounded bg-white/5 px-6 py-3 text-sm uppercase text-gray-300 first:col-span-2'
+                  className='flex items-center justify-between rounded px-6 py-3 text-sm uppercase text-gray-300 hover:outline hover:outline-indigo-500'
                 >
                   <p className='font-bold uppercase text-gray-100'>
                     {item.replace('_', ' ')}
@@ -119,7 +122,7 @@ export default function Dashboard() {
                   </p>
                 </div>
               ))}
-              <div className='flex items-center justify-between rounded bg-white/5 px-6 py-3 text-sm uppercase text-gray-300'>
+              <div className='flex items-center justify-between rounded px-6 py-3 text-sm uppercase text-gray-300'>
                 <p className='font-bold uppercase text-gray-100'>
                   member since
                 </p>
@@ -130,7 +133,7 @@ export default function Dashboard() {
             </div>
           </div>
         </div>
-        <div className='col-span-2 flex h-1/2 w-full flex-col gap-2'>
+        <div className='col-span-2 flex w-full flex-col gap-2'>
           <h3 className='font-bold'>Financial News</h3>
           <div className='pb-8 text-white'>
             <div className='grid grid-cols-7 items-center gap-4 rounded-t border-b border-gray-400 bg-white/5 px-10 py-2.5 text-base uppercase text-gray-300'>

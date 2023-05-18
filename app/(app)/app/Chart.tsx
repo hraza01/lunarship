@@ -68,5 +68,5 @@ export default function Chart({ data }) {
     }
   }, [data])
 
-  return <div className='h-full rounded' ref={chartContainerRef} />
+  return <div className='h-full grow rounded' ref={chartContainerRef} />
 }
