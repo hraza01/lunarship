@@ -1,5 +1,3 @@
-// /v1/accounts/271cfbac-24c5-4fec-b3a0-b9b7a237ef22/ach_relationships
-// /v1/accounts/{account_id}/ach_relationships
 // REQUEST
 // {
 //   "account_owner_name": "Awesome Alpaca",

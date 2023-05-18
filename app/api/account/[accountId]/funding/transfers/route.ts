@@ -1,5 +1,3 @@
-// /v1/accounts/0d178bce-9019-40c3-9841-29544381d812/transfers
-
 // REQUEST
 // {
 //   "transfer_type": "ach",
@@ -35,28 +33,28 @@ const authKey = btoa(
   `${process.env.NEXT_PUBLIC_ALPACA_API_KEY}:${process.env.NEXT_PUBLIC_ALPACA_API_SECRET}`
 )
 
-// export async function GET(
-//   request: Request,
-//   {
-//     params,
-//   }: {
-//     params: { accountId: string }
-//   }
-// ) {
-//   const url = `${process.env.NEXT_PUBLIC_ALPACA_URL}/v1/accounts/${params.accountId}/transfers`
-//
-//   const options = {
-//     method: 'GET',
-//     headers: {
-//       Authorization: `Basic ${authKey}`,
-//     },
-//   }
-//
-//   const res = await fetch(url, options)
-//   const data = await res.json()
-//
-//   return NextResponse.json(data)
-// }
+export async function GET(
+  request: Request,
+  {
+    params,
+  }: {
+    params: { accountId: string }
+  }
+) {
+  const url = `${process.env.NEXT_PUBLIC_ALPACA_URL}/v1/accounts/${params.accountId}/transfers`
+
+  const options = {
+    method: 'GET',
+    headers: {
+      Authorization: `Basic ${authKey}`,
+    },
+  }
+
+  const res = await fetch(url, options)
+  const data = await res.json()
+
+  return NextResponse.json(data)
+}
 
 export async function POST(
   request: Request,
