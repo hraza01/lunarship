@@ -10,9 +10,16 @@ import { Spinner } from 'flowbite-react'
 export default function Dashboard() {
   const [loading, setLoading] = useState(true)
   const [accountBalance, setAccountBalance] = useState([])
-  const [accountValue, setAccountValue] = useState('')
   const [accountDetails, setAccountDetails] = useState({})
   const [news, setNews] = useState([])
+  const [stats, setStats] = useState([])
+
+  const accountStatsKeys = [
+    'equity',
+    'buying_power',
+    'pending_transfer_out',
+    'pending_transfer_in',
+  ]
 
   const accountInformationKeys = [
     'status',
@@ -25,15 +32,14 @@ export default function Dashboard() {
     'maintenance_margin',
   ]
 
-  useEffect(() => {
-    sessionStorage.setItem('accountId', '0d178bce-9019-40c3-9841-29544381d812')
-    const accountId = sessionStorage.getItem('accountId')
+  sessionStorage.setItem('accountId', '0d178bce-9019-40c3-9841-29544381d812')
+  const accountId = sessionStorage.getItem('accountId')
 
+  useEffect(() => {
     async function getAccountBalance() {
       const res = await fetch(`/api/account/${accountId}/portfolio`)
       const data = await res.json()
 
-      setAccountValue(data.base_value)
       setAccountBalance(
         data.timestamp.map((day, index) => {
           return {
@@ -46,7 +52,17 @@ export default function Dashboard() {
     async function getAccountDetails() {
       const res = await fetch(`/api/account/${accountId}`)
       const data = await res.json()
+
       setAccountDetails(data)
+      setStats(
+        // @ts-ignore
+        accountStatsKeys.map((key) => {
+          return {
+            name: key,
+            value: formatNumber(data[key]),
+          }
+        })
+      )
     }
 
     async function getNews() {
@@ -64,7 +80,7 @@ export default function Dashboard() {
     allPromise.then(() => {
       setLoading(false)
     })
-  }, [])
+  }, [accountId])
 
   if (loading) {
     return (
@@ -79,35 +95,7 @@ export default function Dashboard() {
   return (
     <main className='flex w-full flex-col justify-between bg-lunarship-gray-200 text-white lg:flex-row'>
       <div className='h-full w-full p-4'>
-        <Stats />
-        <div className='flex w-full flex-col justify-between gap-8 rounded py-6 pb-10 lg:flex-row'>
-          <div className='flex min-w-fit flex-col items-start justify-center gap-1.5 rounded bg-white/5 py-6 pl-6 pr-16'>
-            <p className='text-base font-bold text-indigo-400'>Total Equity</p>
-            <p className='text-4xl'>{formatNumber(accountValue)}</p>
-          </div>
-          <div className='flex min-w-fit flex-col items-start justify-center gap-1.5 rounded bg-white/5 py-6 pl-6 pr-16'>
-            <p className='text-base font-bold text-indigo-400'>Buying Power</p>
-            <p className='text-4xl'>
-              {formatNumber(accountDetails.buying_power)}
-            </p>
-          </div>
-          <div className='flex min-w-fit flex-col items-start justify-center gap-1.5 rounded bg-white/5 py-6 pl-6 pr-16'>
-            <p className='text-base font-bold text-indigo-400'>
-              Pending Transfers Out
-            </p>
-            <p className='text-4xl'>
-              {formatNumber(accountDetails.pending_transfer_out)}
-            </p>
-          </div>
-          <div className='flex min-w-fit flex-col items-start justify-center gap-1.5 rounded bg-white/5 py-6 pl-6 pr-16'>
-            <p className='text-base font-bold text-indigo-400'>
-              Pending Transfers In
-            </p>
-            <p className='text-4xl'>
-              {formatNumber(accountDetails.pending_transfer_in)}
-            </p>
-          </div>
-        </div>
+        <Stats stats={stats} />
         <div className='mb-16 flex h-1/2 flex-col gap-4 lg:grid lg:grid-cols-2'>
           <div className='flex max-h-96 w-full flex-col gap-2'>
             <h3 className='font-bold'>Account Balance</h3>
