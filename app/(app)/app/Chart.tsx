@@ -1,9 +1,9 @@
 'use client'
-import { createChart, CrosshairMode, LineStyle } from 'lightweight-charts'
+import { createChart, CrosshairMode } from 'lightweight-charts'
 import React, { useEffect, useRef } from 'react'
 
 // @ts-ignore
-export default function ChartComponent({ data }) {
+export default function Chart({ data }) {
   const chartContainerRef = useRef()
 
   useEffect(() => {

@@ -47,7 +47,9 @@ export default function Chart({ ticker }) {
         })
       }
     }
-  }, [])
+  }, [ticker])
 
-  return <div key={ticker} id='tradingview-chart' className='h-full' />
+  return (
+    <div className='h-full w-full' key={ticker} id='tradingview-chart'></div>
+  )
 }
