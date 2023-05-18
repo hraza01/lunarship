@@ -6,6 +6,7 @@ import TickerInformation from '@/app/(app)/app/trade/TickerInformation'
 import RecentTransactions from '@/app/(app)/app/trade/RecentTransactions'
 import QuotesPanel from '@/app/(app)/app/trade/QuotesPanel'
 import TransactionPanel from '@/app/(app)/app/trade/TransactionPanel'
+import { Spinner } from 'flowbite-react'
 
 export default function Trade() {
   // test data
@@ -63,29 +64,27 @@ export default function Trade() {
     },
   ]
 
-  const socket = new WebSocket(process.env.NEXT_PUBLIC_ALPACA_WS)
-
   const [ticker, setTicker] = useState('AAPL')
   const [recentTransactions, setRecentTransactions] = useState([...tradeData])
   const [quotes, setQuotes] = useState([...quoteData])
-  const [tickerInformation, setTickerInformation] = useState('')
+  const [tickerInformation, setTickerInformation] = useState({})
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
     // live data
+    const socket = new WebSocket(process.env.NEXT_PUBLIC_ALPACA_WS)
     alpacaConnect(socket)
-    socket.onmessage = function (event) {
-      const response = JSON.parse(event.data)
-      console.log(response[0])
+    socket.onmessage = async function (event) {
+      const response = await JSON.parse(event.data)
 
       response[0].T === 't' &&
         setRecentTransactions((prevState) => {
-          return [...prevState, ...response]
+          return [...response, ...prevState]
         })
 
       response[0].T === 'q' &&
         setQuotes((prevState) => {
-          return [...prevState, ...response]
+          return [...response, ...prevState]
         })
     }
 
@@ -96,63 +95,64 @@ export default function Trade() {
       setTickerInformation(data)
     }
 
-    const request = JSON.stringify({
+    const subscribe = JSON.stringify({
       action: 'subscribe',
       trades: [ticker],
       quotes: [ticker],
     })
 
-    getTickerInformation().then(() => setLoading(false))
-    socket.readyState && socket.send(request)
+    getTickerInformation().then(() => {
+      // socket.send(subscribe)
+      socket.readyState && socket.send(subscribe)
+      setLoading(false)
+    })
 
     return () => {
-      const request = JSON.stringify({
+      const unsubscribe = JSON.stringify({
         action: 'unsubscribe',
         trades: [ticker],
         quotes: [ticker],
       })
 
-      socket.readyState && socket.send(request) && socket.close()
+      socket.readyState && socket.send(unsubscribe) && socket.close()
     }
   }, [ticker])
 
   if (loading)
     return (
-      <main className='flex h-full w-full flex-col bg-lunarship-gray-200 lg:flex-row'>
-        Spinner
+      <main className='flex h-full w-full flex-col items-center justify-center lg:flex-row'>
+        <Spinner color='purple' aria-label='Purple spinner example' />
       </main>
     )
 
   return (
-    <main className='flex w-full flex-col bg-lunarship-gray-200 lg:flex-row'>
-      <div className='flex-grow justify-self-center lg:w-4/5'>
+    <main className='flex h-full w-full flex-col justify-between lg:flex-row'>
+      <div className='min-h-[50dvh] flex-grow lg:h-full lg:min-h-full lg:w-4/5'>
         <Chart ticker={ticker} />
       </div>
-      <div className='bg-lunarship-gray-300 p-4 lg:w-full lg:max-w-xs'>
-        <div className='grid grid-cols-1 gap-12'>
-          <div>
-            <h4 className='mb-2 text-xs font-semibold text-gray-400'>
-              Information
-            </h4>
-            <TickerInformation tickerInformation={tickerInformation} />
-          </div>
-          <div>
-            <h4 className='mb-2 text-xs font-semibold text-gray-400'>
-              Recent Transactions
-            </h4>
-            <RecentTransactions transactions={recentTransactions} />
-          </div>
-          <div>
-            <h4 className='mb-2 text-xs font-semibold text-gray-400'>
-              Live Quotes
-            </h4>
-            <QuotesPanel quotes={quotes} />
-          </div>
-          <div>
-            <h4 className='mb-2 text-xs font-semibold text-gray-400'>Orders</h4>
-            <div className='flex w-full items-center justify-center rounded'>
-              <TransactionPanel ticker={ticker} />
-            </div>
+      <div className='grid grid-cols-1 gap-2 bg-lunarship-gray-300 p-4 align-bottom lg:w-full lg:max-w-xs'>
+        <div>
+          <h4 className='mb-2 text-xs font-semibold text-gray-400'>
+            Information
+          </h4>
+          <TickerInformation tickerInformation={tickerInformation} />
+        </div>
+        <div>
+          <h4 className='mb-2 text-xs font-semibold text-gray-400'>
+            Recent Transactions
+          </h4>
+          <RecentTransactions transactions={recentTransactions} />
+        </div>
+        <div>
+          <h4 className='mb-2 text-xs font-semibold text-gray-400'>
+            Live Quotes
+          </h4>
+          <QuotesPanel quotes={quotes} />
+        </div>
+        <div className='self-end'>
+          <h4 className='mb-2 text-xs font-semibold text-gray-400'>Orders</h4>
+          <div className='flex w-full items-center justify-center rounded'>
+            <TransactionPanel ticker={ticker} />
           </div>
         </div>
       </div>
