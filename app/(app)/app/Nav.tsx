@@ -1,5 +1,6 @@
 'use client'
-import { Fragment, useState } from 'react'
+import { Fragment, useState, useEffect } from 'react'
+import Search from '@/app/(app)/app/Search'
 import { Dialog, Menu, Transition } from '@headlessui/react'
 import {
   Bars3Icon,
@@ -63,6 +64,7 @@ function classNames(...classes: any[]) {
 export default function Nav() {
   const [sidebarOpen, setSidebarOpen] = useState(false)
   const [navItems, setNavItems] = useState(navigation)
+  const [searching, setSearching] = useState(false)
 
   const navClickHandler = (e: any) => {
     navItems.forEach((item) => {
@@ -76,6 +78,18 @@ export default function Nav() {
       )
     })
   }
+
+  useEffect(() => {
+    document.addEventListener('keypress', (e) => {
+      e.key === '/' && setSearching(true)
+    })
+
+    return () => {
+      document.removeEventListener('keypress', (e) => {
+        e.key === '/' && setSearching(true)
+      })
+    }
+  }, [])
 
   return (
     <>
@@ -307,7 +321,12 @@ export default function Nav() {
           />
 
           <div className='flex flex-1 gap-x-4 self-stretch lg:gap-x-6'>
-            <form className='relative flex flex-1 text-gray-400 hover:text-white active:text-white'>
+            <Search open={searching} setOpen={setSearching} />
+            <form
+              className={`${
+                searching ? 'invisible' : ''
+              } relative flex flex-1 text-gray-400 hover:text-white active:text-white`}
+            >
               <label htmlFor='search-field' className='sr-only'>
                 Search
               </label>
@@ -321,7 +340,14 @@ export default function Nav() {
                 placeholder='Search...'
                 type='search'
                 name='search'
+                onClick={() => setSearching(true)}
+                onKeyPressCapture={() => setSearching(true)}
               />
+              <div className='mr-6 flex items-center justify-center lg:mr-8'>
+                <kbd className='inline-flex items-center rounded border border-gray-100/40 px-3.5 py-2 font-sans text-xs text-gray-400'>
+                  /
+                </kbd>
+              </div>
             </form>
             <div className='flex items-center gap-x-4 lg:gap-x-6'>
               <button

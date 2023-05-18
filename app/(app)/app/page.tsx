@@ -2,6 +2,7 @@
 import { useEffect, useState } from 'react'
 import { parseISO, fromUnixTime, format } from 'date-fns'
 import { formatNumber } from '@/utils/helpers'
+import Stats from '@/app/(app)/app/Stats'
 import Chart from '@/app/(app)/app/Chart'
 import Link from 'next/link'
 import { Spinner } from 'flowbite-react'
@@ -14,14 +15,14 @@ export default function Dashboard() {
   const [news, setNews] = useState([])
 
   const accountInformationKeys = [
-    'account_number',
     'status',
-    'crypto_status',
     'daytrade_count',
+    'crypto_status',
+    'account_number',
     'currency',
     'cash',
-    'maintenance_margin',
     'clearing_broker',
+    'maintenance_margin',
   ]
 
   useEffect(() => {
@@ -78,6 +79,7 @@ export default function Dashboard() {
   return (
     <main className='flex w-full flex-col justify-between bg-lunarship-gray-200 text-white lg:flex-row'>
       <div className='h-full w-full p-4'>
+        <Stats />
         <div className='flex w-full flex-col justify-between gap-8 rounded py-6 pb-10 lg:flex-row'>
           <div className='flex min-w-fit flex-col items-start justify-center gap-1.5 rounded bg-white/5 py-6 pl-6 pr-16'>
             <p className='text-base font-bold text-indigo-400'>Total Equity</p>
@@ -106,18 +108,18 @@ export default function Dashboard() {
             </p>
           </div>
         </div>
-        <div className='mb-2 grid h-1/2 grid-cols-2 gap-4'>
+        <div className='mb-16 flex h-1/2 flex-col gap-4 lg:grid lg:grid-cols-2'>
           <div className='flex max-h-96 w-full flex-col gap-2'>
             <h3 className='font-bold'>Account Balance</h3>
             <Chart data={accountBalance}></Chart>
           </div>
           <div className='flex w-full flex-col gap-2'>
             <h3 className='font-bold'>Account Information</h3>
-            <div className='grid w-full grid-cols-2 justify-items-stretch gap-4 rounded text-gray-100'>
+            <div className='grid w-full grid-cols-2 justify-items-stretch gap-1 rounded text-gray-100'>
               {accountInformationKeys.map((item, index) => (
                 <div
                   key={index}
-                  className='flex items-center justify-between rounded bg-white/5 px-6 py-4 text-base uppercase text-gray-300 first:col-span-2'
+                  className='flex items-center justify-between rounded bg-white/5 px-6 py-3 text-sm uppercase text-gray-300 first:col-span-2'
                 >
                   <p className='font-bold uppercase text-gray-100'>
                     {item.replace('_', ' ')}
@@ -129,7 +131,7 @@ export default function Dashboard() {
                   </p>
                 </div>
               ))}
-              <div className='flex items-center justify-between rounded bg-white/5 px-6 py-4 text-base uppercase text-gray-300'>
+              <div className='flex items-center justify-between rounded bg-white/5 px-6 py-3 text-sm uppercase text-gray-300'>
                 <p className='font-bold uppercase text-gray-100'>
                   member since
                 </p>

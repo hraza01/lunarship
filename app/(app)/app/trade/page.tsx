@@ -8,65 +8,10 @@ import QuotesPanel from '@/app/(app)/app/trade/QuotesPanel'
 import TransactionPanel from '@/app/(app)/app/trade/TransactionPanel'
 import { Spinner } from 'flowbite-react'
 
-export default function Trade() {
-  // test data
-  const tradeData = [
-    {
-      T: 't',
-      i: 96921,
-      S: 'AAPL',
-      x: 'D',
-      p: 126.55,
-      s: 1,
-      t: '2021-02-22T15:51:44.208Z',
-      c: ['@', 'I'],
-      z: 'C',
-    },
-    {
-      T: 't',
-      i: 96921,
-      S: 'AAPL',
-      x: 'D',
-      p: 126.55,
-      s: 1,
-      t: '2021-02-22T15:51:44.208Z',
-      c: ['@', 'I'],
-      z: 'C',
-    },
-  ]
-
-  const quoteData = [
-    {
-      T: 'q',
-      S: 'AAPL',
-      bx: 'V',
-      bp: 169,
-      bs: 1,
-      ax: 'V',
-      ap: 171.98,
-      as: 4,
-      c: ['R'],
-      z: 'C',
-      t: '2023-05-16T18:10:21.192116817Z',
-    },
-    {
-      T: 'q',
-      S: 'AAPL',
-      bx: 'V',
-      bp: 169,
-      bs: 1,
-      ax: 'V',
-      ap: 171.98,
-      as: 4,
-      c: ['R'],
-      z: 'C',
-      t: '2023-05-16T18:10:21.192116817Z',
-    },
-  ]
-
-  const [ticker, setTicker] = useState('AAPL')
-  const [recentTransactions, setRecentTransactions] = useState([...tradeData])
-  const [quotes, setQuotes] = useState([...quoteData])
+export default function Trade({ searchParams }) {
+  const [ticker, setTicker] = useState(searchParams.ticker || 'AAPL')
+  const [recentTransactions, setRecentTransactions] = useState([])
+  const [quotes, setQuotes] = useState([])
   const [tickerInformation, setTickerInformation] = useState({})
   const [loading, setLoading] = useState(true)
 
@@ -78,14 +23,10 @@ export default function Trade() {
       const response = await JSON.parse(event.data)
 
       response[0].T === 't' &&
-        setRecentTransactions((prevState) => {
-          return [...response, ...prevState]
-        })
+        setRecentTransactions((prevState: any[]) => [...response, ...prevState])
 
       response[0].T === 'q' &&
-        setQuotes((prevState) => {
-          return [...response, ...prevState]
-        })
+        setQuotes((prevState: any[]) => [...response, ...prevState])
     }
 
     // symbol information
