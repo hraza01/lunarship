@@ -82,13 +82,13 @@ export default function Trade({ searchParams }) {
           <h4 className='mb-2 text-xs font-semibold text-gray-400'>
             Recent Transactions
           </h4>
-          <RecentTransactions transactions={recentTransactions} />
+          <RecentTransactions transactions={recentTransactions.slice(0, 6)} />
         </div>
         <div>
           <h4 className='mb-2 text-xs font-semibold text-gray-400'>
             Live Quotes
           </h4>
-          <QuotesPanel quotes={quotes} />
+          <QuotesPanel quotes={quotes.slice(0, 6)} />
         </div>
         <div className='self-end'>
           <h4 className='mb-2 text-xs font-semibold text-gray-400'>Orders</h4>
