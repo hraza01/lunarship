@@ -8,7 +8,12 @@ export default function QuotesPanel({ quotes }) {
         <p>Ask Price</p>
         <p>Ask Size</p>
       </div>
-      <div className='overflow-y-scroll'>
+      <div className={`${quotes.length ? 'overflow-y-scroll' : ''}`}>
+        {quotes.length === 0 && (
+          <div className='flex items-center justify-center border-b p-10 text-xs text-gray-100'>
+            Quotes unavailable during off hours
+          </div>
+        )}
         {quotes.map((quote, index) => (
           <div
             key={index}

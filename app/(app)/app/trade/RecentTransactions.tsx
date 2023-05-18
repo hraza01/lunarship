@@ -9,7 +9,12 @@ export default function RecentTransactions({ transactions }) {
         <p>Size</p>
         <p>Price</p>
       </div>
-      <div className='overflow-y-scroll'>
+      <div className={`${transactions.length ? 'overflow-y-scroll' : ''}`}>
+        {transactions.length === 0 && (
+          <div className='flex items-center justify-center border-b p-10 text-xs text-gray-100'>
+            Transactions unavailable during off hours
+          </div>
+        )}
         {transactions.map((transaction, index) => (
           <div
             key={index}
