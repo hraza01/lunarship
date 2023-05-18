@@ -1,6 +1,7 @@
 'use client'
 import { useState } from 'react'
 import { Tab } from '@headlessui/react'
+import Modal from '@/app/(app)/app/trade/Modal'
 
 function classNames(...classes: any[]) {
   return classes.filter(Boolean).join(' ')
@@ -13,6 +14,7 @@ export default function TransactionPanel({ ticker }) {
   const [quantity, setQuantity] = useState('')
   const [orderType, setOrderType] = useState('')
   const [duration, setDuration] = useState('')
+  const [show, setShow] = useState(false)
 
   const sides = ['buy', 'sell']
 
@@ -37,15 +39,24 @@ export default function TransactionPanel({ ticker }) {
 
     orderType.toLowerCase() === 'market' && delete payload['price']
 
-    console.log('request', payload)
-
     const res = await fetch(url, options)
     const data = await res.json()
-    console.log('response', data)
+
+    setShow(true)
+
+    setInterval(function () {
+      setShow(false)
+    }, 5000)
   }
 
   return (
     <div className='w-full sm:px-0 lg:max-w-md'>
+      <Modal
+        show={show}
+        title={'Success'}
+        detail={'Order has been sent to the market'}
+        setShow={setShow}
+      />
       <Tab.Group>
         <Tab.List className='flex space-x-1 rounded-xl bg-blue-900/20'>
           {sides.map((side) => (
