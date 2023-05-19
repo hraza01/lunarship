@@ -31,10 +31,9 @@ export default function Dashboard() {
     'maintenance_margin',
   ]
 
-  sessionStorage.setItem('accountId', '0d178bce-9019-40c3-9841-29544381d812')
-  const accountId = sessionStorage.getItem('accountId')
-
   useEffect(() => {
+    sessionStorage.setItem('accountId', '0d178bce-9019-40c3-9841-29544381d812')
+    const accountId = sessionStorage.getItem('accountId')
     async function getAccountBalance() {
       const res = await fetch(`/api/account/${accountId}/portfolio`)
       const data = await res.json()
@@ -79,7 +78,7 @@ export default function Dashboard() {
     allPromise.then(() => {
       setLoading(false)
     })
-  }, [accountId])
+  }, [])
 
   if (loading) {
     return (

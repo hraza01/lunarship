@@ -1,5 +1,7 @@
 'use client'
 import { Fragment, useState, useEffect } from 'react'
+import { usePathname } from 'next/navigation'
+import Link from 'next/link'
 import Search from '@/app/(app)/app/Search'
 import { Dialog, Menu, Transition } from '@headlessui/react'
 import {
@@ -15,17 +17,15 @@ import {
   XMarkIcon,
 } from '@heroicons/react/24/outline'
 import { ChevronDownIcon, MagnifyingGlassIcon } from '@heroicons/react/20/solid'
-import Link from 'next/link'
 
 const navigation = [
-  { name: 'Dashboard', href: '/app', icon: HomeIcon, current: true },
+  { name: 'Dashboard', href: '/app', icon: HomeIcon },
   {
     name: 'Portfolio',
     href: '/app/portfolio',
     icon: FolderIcon,
-    current: false,
   },
-  { name: 'Trade', href: '/app/trade', icon: UsersIcon, current: false },
+  { name: 'Trade', href: '/app/trade', icon: UsersIcon },
   {
     name: 'Trade History',
     href: '/app/trade-history',
@@ -36,19 +36,17 @@ const navigation = [
     name: 'Documents',
     href: '/app/documents',
     icon: DocumentDuplicateIcon,
-    current: false,
   },
-  { name: 'Reports', href: '/app/reports', icon: ChartPieIcon, current: false },
+  { name: 'Reports', href: '/app/reports', icon: ChartPieIcon },
 ]
 
 const teams = [
-  { id: 1, name: 'Stocks', href: '#', initial: 'S', current: false },
+  { id: 1, name: 'Stocks', href: '#', initial: 'S' },
   {
     id: 2,
     name: 'Crypto Currencies',
     href: '#',
     initial: 'C',
-    current: false,
   },
 ]
 
@@ -62,22 +60,10 @@ function classNames(...classes: any[]) {
 }
 
 export default function Nav() {
-  const [sidebarOpen, setSidebarOpen] = useState(false)
-  const [navItems, setNavItems] = useState(navigation)
-  const [searching, setSearching] = useState(false)
+  const pathname = usePathname()
 
-  const navClickHandler = (e: any) => {
-    navItems.forEach((item) => {
-      item.current = false
-    })
-    setNavItems((prevState: any) => {
-      return prevState.forEach((item: any) =>
-        item.name === e.target.text
-          ? (item.current = true)
-          : (item.current = false)
-      )
-    })
-  }
+  const [sidebarOpen, setSidebarOpen] = useState(false)
+  const [searching, setSearching] = useState(false)
 
   useEffect(() => {
     document.addEventListener('keypress', (e) => {
@@ -158,25 +144,29 @@ export default function Nav() {
                     <ul role='list' className='flex flex-1 flex-col gap-y-7'>
                       <li>
                         <ul role='list' className='-mx-2 space-y-1'>
-                          {navigation.map((item) => (
-                            <li key={item.name}>
-                              <a
-                                href={item.href}
-                                className={classNames(
-                                  item.current
-                                    ? 'bg-slate-800 text-white'
-                                    : 'text-gray-400 hover:bg-slate-800 hover:text-white',
-                                  'group flex gap-x-3 rounded-md p-2 text-sm font-semibold leading-6'
-                                )}
-                              >
-                                <item.icon
-                                  className='h-6 w-6 shrink-0'
-                                  aria-hidden='true'
-                                />
-                                {item.name}
-                              </a>
-                            </li>
-                          ))}
+                          {navigation.map((item) => {
+                            const isActive = pathname === item.href
+
+                            return (
+                              <li key={item.name}>
+                                <a
+                                  href={item.href}
+                                  className={classNames(
+                                    isActive
+                                      ? 'bg-slate-800 text-white'
+                                      : 'text-gray-400 hover:bg-slate-800 hover:text-white',
+                                    'group flex gap-x-3 rounded-md p-2 text-sm font-semibold leading-6'
+                                  )}
+                                >
+                                  <item.icon
+                                    className='h-6 w-6 shrink-0'
+                                    aria-hidden='true'
+                                  />
+                                  {item.name}
+                                </a>
+                              </li>
+                            )
+                          })}
                         </ul>
                       </li>
                       <li>
@@ -239,26 +229,28 @@ export default function Nav() {
             <ul role='list' className='flex flex-1 flex-col gap-y-7'>
               <li>
                 <ul role='list' className='-mx-2 space-y-1'>
-                  {navigation.map((item) => (
-                    <li key={item.name}>
-                      <Link
-                        href={item.href}
-                        onClick={navClickHandler}
-                        className={classNames(
-                          item.current
-                            ? 'bg-slate-800 text-white'
-                            : 'text-gray-400 hover:bg-slate-800 hover:text-white',
-                          'group flex gap-x-3 rounded-md p-2 text-sm font-semibold leading-6'
-                        )}
-                      >
-                        <item.icon
-                          className='h-6 w-6 shrink-0'
-                          aria-hidden='true'
-                        />
-                        {item.name}
-                      </Link>
-                    </li>
-                  ))}
+                  {navigation.map((item) => {
+                    const isActive = pathname === item.href
+                    return (
+                      <li key={item.name}>
+                        <Link
+                          href={item.href}
+                          className={classNames(
+                            isActive
+                              ? 'bg-slate-800 text-white'
+                              : 'text-gray-400 hover:bg-slate-800 hover:text-white',
+                            'group flex gap-x-3 rounded-md p-2 text-sm font-semibold leading-6'
+                          )}
+                        >
+                          <item.icon
+                            className='h-6 w-6 shrink-0'
+                            aria-hidden='true'
+                          />
+                          {item.name}
+                        </Link>
+                      </li>
+                    )
+                  })}
                 </ul>
               </li>
               <li>
@@ -341,7 +333,7 @@ export default function Nav() {
                 type='search'
                 name='search'
                 onClick={() => setSearching(true)}
-                onKeyPressCapture={() => setSearching(true)}
+                onKeyDown={() => setSearching(true)}
               />
               <div className='mr-6 flex items-center justify-center lg:mr-8'>
                 <kbd className='inline-flex items-center rounded border border-gray-100/40 px-3.5 py-2 font-sans text-xs text-gray-400'>
