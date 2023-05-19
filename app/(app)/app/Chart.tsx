@@ -46,7 +46,7 @@ export default function Chart({ data }) {
     const newSeries = chart.addAreaSeries({
       lineColor: '#4338ca',
       topColor: '#4338ca',
-      bottomColor: '#272C35',
+      bottomColor: 'transparent',
     })
 
     newSeries.priceScale().applyOptions({
