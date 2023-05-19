@@ -82,10 +82,8 @@ export default function Dashboard() {
 
   if (loading) {
     return (
-      <main className='flex h-full w-full text-white lg:flex-row'>
-        <div className='inset-0 flex w-full items-center justify-center rounded border border-gray-400 p-4'>
-          <Spinner color='purple' aria-label='Purple spinner example' />
-        </div>
+      <main className='inset-0 flex h-full w-full items-center justify-center rounded p-4'>
+        <Spinner color='purple' aria-label='Purple spinner example' />
       </main>
     )
   }
@@ -95,13 +93,15 @@ export default function Dashboard() {
       <div className='flex h-full w-full flex-col gap-8 p-4'>
         <Stats stats={stats} />
         <div className='flex flex-col gap-4 lg:grid lg:grid-cols-2'>
-          <div className='flex h-[24rem] w-full flex-col gap-2'>
+          <div className='flex w-full flex-col gap-2'>
             <h3 className='font-bold'>Account Balance</h3>
-            <Chart data={accountBalance}></Chart>
+            <div className='h-[24rem] w-full grow rounded bg-white/5 p-4'>
+              <Chart data={accountBalance} />
+            </div>
           </div>
-          <div className='flex h-[24rem] w-full flex-col gap-2'>
+          <div className='flex w-full flex-col gap-2'>
             <h3 className='font-bold'>Account Information</h3>
-            <div className='align grid grid-cols-2 justify-items-stretch gap-8 rounded bg-white/5 p-4 text-gray-100'>
+            <div className='align grid grid-cols-2 justify-items-stretch gap-8 rounded bg-white/5 p-4 text-gray-100 lg:h-[24rem]'>
               <div className='col-span-2 flex items-center justify-between rounded px-6 py-3 text-sm uppercase text-gray-300'>
                 <p className='font-bold uppercase text-gray-100'>status</p>
                 <p className='text-indigo-500'>{accountDetails.status}</p>

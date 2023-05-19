@@ -46,7 +46,7 @@ export default function Chart({ data }) {
     const newSeries = chart.addAreaSeries({
       lineColor: '#4338ca',
       topColor: '#4338ca',
-      bottomColor: '#1D2530',
+      bottomColor: '#272C35',
     })
 
     newSeries.priceScale().applyOptions({
@@ -68,5 +68,5 @@ export default function Chart({ data }) {
     }
   }, [data])
 
-  return <div className='h-full grow rounded' ref={chartContainerRef} />
+  return <div className='h-full' ref={chartContainerRef} />
 }
