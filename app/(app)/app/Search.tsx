@@ -1,60 +1,72 @@
-import { Fragment, useState } from 'react'
+'use client'
+import { Fragment, useEffect, useState } from 'react'
+import { useRouter } from 'next/navigation'
 import { Combobox, Dialog, Transition } from '@headlessui/react'
 import { MagnifyingGlassIcon } from '@heroicons/react/20/solid'
-import {
-  CalendarIcon,
-  CodeBracketIcon,
-  DocumentIcon,
-  ExclamationCircleIcon,
-  LinkIcon,
-  PencilSquareIcon,
-  PhotoIcon,
-  TableCellsIcon,
-  VideoCameraIcon,
-  ViewColumnsIcon,
-  Bars4Icon,
-} from '@heroicons/react/24/outline'
-
-const items = [
-  {
-    id: 1,
-    name: 'Text',
-    description: 'Add freeform text with basic formatting options.',
-    url: '#',
-    color: 'bg-indigo-500',
-    icon: PencilSquareIcon,
-  },
-  {
-    id: 2,
-    name: 'Text',
-    description: 'Add freeform text with basic formatting options.',
-    url: '#',
-    color: 'bg-indigo-500',
-    icon: PencilSquareIcon,
-  },
-  {
-    id: 3,
-    name: 'Text',
-    description: 'Add freeform text with basic formatting options.',
-    url: '#',
-    color: 'bg-indigo-500',
-    icon: PencilSquareIcon,
-  },
-  // More items...
-]
+import { ExclamationCircleIcon } from '@heroicons/react/24/outline'
+import { getAssetLogo } from '@/utils/helpers'
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(' ')
 }
 
-export default function Search({ open, setOpen }) {
+// const items = await getData()
+
+export default function Search() {
+  const router = useRouter()
+
+  const [open, setOpen] = useState(false)
+  const [items, setItems] = useState([])
   const [query, setQuery] = useState('')
+
+  const tickers = [
+    'AAPL',
+    'AMZN',
+    'BTCUSD',
+    'F',
+    'GE',
+    'META',
+    'MSFT',
+    'NFLX',
+    'NVDA',
+    'TSLA',
+  ]
+
+  useEffect(() => {
+    async function getAssets() {
+      const res = await fetch('/api/assets')
+      const data = await res.json()
+      const filteredData = data.filter((ticker) =>
+        tickers.includes(ticker.symbol)
+      )
+
+      for (const ticker of filteredData) {
+        ticker.url = await getAssetLogo(ticker.symbol)
+      }
+
+      setItems(filteredData)
+    }
+    getAssets()
+
+    document.addEventListener('keypress', (e) => {
+      e.key === '/' && setOpen(true)
+    })
+
+    return () => {
+      document.removeEventListener('keypress', (e) => {
+        e.key === '/' && setOpen(true)
+      })
+    }
+  }, [])
 
   const filteredItems =
     query === ''
       ? []
       : items.filter((item) => {
-          return item.name.toLowerCase().includes(query.toLowerCase())
+          return (
+            item.name.toLowerCase().includes(query.toLowerCase()) ||
+            item.symbol.toLowerCase().includes(query.toLowerCase())
+          )
         })
 
   return (
@@ -64,7 +76,7 @@ export default function Search({ open, setOpen }) {
       afterLeave={() => setQuery('')}
       appear
     >
-      <Dialog as='div' className='relative z-10' onClose={setOpen}>
+      <Dialog as='div' className='relative z-50' onClose={setOpen}>
         <Transition.Child
           as={Fragment}
           enter='ease-out duration-300'
@@ -74,7 +86,7 @@ export default function Search({ open, setOpen }) {
           leaveFrom='opacity-100'
           leaveTo='opacity-0'
         >
-          <div className='fixed inset-0 bg-gray-500 bg-opacity-25 transition-opacity' />
+          <div className='fixed inset-0 bg-black/40 bg-opacity-100 transition-opacity' />
         </Transition.Child>
 
         <div className='fixed inset-0 z-10 overflow-y-auto p-4 sm:p-6 md:p-20'>
@@ -88,7 +100,12 @@ export default function Search({ open, setOpen }) {
             leaveTo='opacity-0 scale-95'
           >
             <Dialog.Panel className='mx-auto mt-16 max-w-md transform divide-y divide-gray-100 overflow-hidden rounded-xl bg-white shadow-2xl ring-1 ring-black ring-opacity-5 transition-all md:max-w-2xl'>
-              <Combobox onChange={(item) => (window.location = item.url)}>
+              <Combobox
+                onChange={(item) => {
+                  setOpen(false)
+                  router.push(`/app/trade?ticker=${item.symbol}`)
+                }}
+              >
                 <div className='relative'>
                   <MagnifyingGlassIcon
                     className='pointer-events-none absolute left-4 top-3.5 h-5 w-5 text-gray-400'
@@ -112,22 +129,18 @@ export default function Search({ open, setOpen }) {
                         value={item}
                         className={({ active }) =>
                           classNames(
-                            'flex cursor-default select-none rounded-xl p-3',
+                            'flex cursor-default select-none items-center rounded-xl p-3',
                             active && 'bg-gray-100'
                           )
                         }
                       >
                         {({ active }) => (
                           <>
-                            <div
-                              className={classNames(
-                                'flex h-10 w-10 flex-none items-center justify-center rounded-lg',
-                                item.color
-                              )}
-                            >
-                              <item.icon
-                                className='h-6 w-6 text-white'
-                                aria-hidden='true'
+                            <div className='flex h-7 w-7 items-center justify-center rounded-lg'>
+                              <img
+                                src={item.url}
+                                className='w-full object-contain'
+                                alt='company logo'
                               />
                             </div>
                             <div className='ml-4 flex-auto'>
@@ -137,7 +150,7 @@ export default function Search({ open, setOpen }) {
                                   active ? 'text-gray-900' : 'text-gray-700'
                                 )}
                               >
-                                {item.name}
+                                {item.symbol}
                               </p>
                               <p
                                 className={classNames(
@@ -145,7 +158,7 @@ export default function Search({ open, setOpen }) {
                                   active ? 'text-gray-700' : 'text-gray-500'
                                 )}
                               >
-                                {item.description}
+                                {item.name}
                               </p>
                             </div>
                           </>

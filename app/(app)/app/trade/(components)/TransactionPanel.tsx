@@ -1,7 +1,7 @@
 'use client'
 import { useState } from 'react'
 import { Tab } from '@headlessui/react'
-import Modal from '@/app/(app)/app/trade/Modal'
+import Notification from '@/app/(app)/app/trade/(components)/Notification'
 
 function classNames(...classes: any[]) {
   return classes.filter(Boolean).join(' ')
@@ -51,7 +51,7 @@ export default function TransactionPanel({ ticker }) {
 
   return (
     <div className='w-full sm:px-0 lg:max-w-md'>
-      <Modal
+      <Notification
         show={show}
         title={'Success'}
         detail={'Order has been sent to the market'}

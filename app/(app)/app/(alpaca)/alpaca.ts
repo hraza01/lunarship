@@ -6,13 +6,14 @@ const request = {
   secret: process.env.NEXT_PUBLIC_ALPACA_API_SECRET,
 }
 
-function alpacaConnect(socket) {
+function alpacaConnect(socket, setIsConnected) {
   socket.onerror = function () {
     throw Error('Websocket connection error')
   }
 
   socket.onopen = function () {
     // Send handshake data
+    setIsConnected(true)
     socket.send(JSON.stringify(request))
   }
 }

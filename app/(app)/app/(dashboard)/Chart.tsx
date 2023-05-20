@@ -1,9 +1,14 @@
 'use client'
 import { createChart, CrosshairMode } from 'lightweight-charts'
-import React, { useEffect, useRef } from 'react'
+import { useEffect, useRef, useState } from 'react'
+import { format, fromUnixTime } from 'date-fns'
+import { Spinner } from 'flowbite-react'
 
 // @ts-ignore
-export default function Chart({ data }) {
+export default function Chart({ accountId }) {
+  const [loading, setLoading] = useState(true)
+  const [accountBalance, setAccountBalance] = useState([])
+
   const chartContainerRef = useRef()
 
   useEffect(() => {
@@ -57,7 +62,25 @@ export default function Chart({ data }) {
       },
     })
 
-    newSeries.setData(data)
+    async function getAccountBalance() {
+      const res = await fetch(
+        `${process.env.NEXT_PUBLIC_HOST}/api/account/${accountId}/portfolio`
+      )
+      const data = await res.json()
+
+      setAccountBalance(
+        data.timestamp.map((day, index) => {
+          return {
+            time: format(fromUnixTime(day), 'yyyy-MM-dd'),
+            value: Number(data.equity[index]),
+          }
+        })
+      )
+
+      setLoading(false)
+    }
+
+    getAccountBalance().then(() => newSeries.setData(accountBalance))
 
     window.addEventListener('resize', handleResize)
 
@@ -66,7 +89,20 @@ export default function Chart({ data }) {
 
       chart.remove()
     }
-  }, [data])
+  }, [accountId])
 
-  return <div className='h-full' ref={chartContainerRef} />
+  if (loading) {
+    return (
+      <Spinner color='purple' aria-label='Purple spinner example' size='lg' />
+    )
+  }
+
+  return (
+    <div className='flex w-full flex-col gap-2'>
+      <h3 className='font-bold'>Account Balance</h3>
+      <div className='h-[24rem] w-full grow rounded bg-white/5 p-4'>
+        <div className='h-full' ref={chartContainerRef} />
+      </div>
+    </div>
+  )
 }
