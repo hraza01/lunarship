@@ -4,6 +4,7 @@ import AccountInformation from '@/app/(app)/app/(dashboard)/AccountInformation'
 import News from '@/app/(app)/app/(dashboard)/News'
 
 export default function Dashboard() {
+  // will be retrieved at login
   const accountId = '0d178bce-9019-40c3-9841-29544381d812'
 
   return (

@@ -33,12 +33,17 @@ export default function Search() {
   ]
 
   useEffect(() => {
+    function onKeyDown(e) {
+      if (e.key === 'k' && (e.metaKey || e.ctrlKey)) {
+        setOpen(!open)
+      }
+    }
+
     async function getAssets() {
       const res = await fetch('/api/assets')
       const data = await res.json()
-      const filteredData = data.filter((ticker) =>
-        tickers.includes(ticker.symbol)
-      )
+
+      const filteredData = data.filter(({ symbol }) => tickers.includes(symbol))
 
       for (const ticker of filteredData) {
         ticker.url = await getAssetLogo(ticker.symbol)
@@ -46,18 +51,15 @@ export default function Search() {
 
       setItems(filteredData)
     }
-    getAssets()
 
-    document.addEventListener('keypress', (e) => {
-      e.key === '/' && setOpen(true)
-    })
+    !items.length && getAssets()
+
+    window.addEventListener('keydown', onKeyDown)
 
     return () => {
-      document.removeEventListener('keypress', (e) => {
-        e.key === '/' && setOpen(true)
-      })
+      window.removeEventListener('keydown', onKeyDown)
     }
-  }, [])
+  }, [open])
 
   const filteredItems =
     query === ''
@@ -79,7 +81,7 @@ export default function Search() {
       <Dialog as='div' className='relative z-50' onClose={setOpen}>
         <Transition.Child
           as={Fragment}
-          enter='ease-out duration-300'
+          enter='ease-out duration-200'
           enterFrom='opacity-0'
           enterTo='opacity-100'
           leave='ease-in duration-200'
@@ -92,12 +94,12 @@ export default function Search() {
         <div className='fixed inset-0 z-10 overflow-y-auto p-4 sm:p-6 md:p-20'>
           <Transition.Child
             as={Fragment}
-            enter='ease-out duration-300'
-            enterFrom='opacity-0 scale-95'
+            enter='ease-out duration-200'
+            enterFrom='opacity-0 scale-0'
             enterTo='opacity-100 scale-100'
             leave='ease-in duration-200'
             leaveFrom='opacity-100 scale-100'
-            leaveTo='opacity-0 scale-95'
+            leaveTo='opacity-0 scale-0'
           >
             <Dialog.Panel className='mx-auto mt-16 max-w-md transform divide-y divide-gray-100 overflow-hidden rounded-xl bg-white shadow-2xl ring-1 ring-black ring-opacity-5 transition-all md:max-w-2xl'>
               <Combobox
@@ -113,7 +115,7 @@ export default function Search() {
                   />
                   <Combobox.Input
                     className='h-12 w-full border-0 bg-transparent pl-11 pr-4 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm'
-                    placeholder='Search...'
+                    placeholder='Search a symbol...'
                     onChange={(event) => setQuery(event.target.value)}
                   />
                 </div>
