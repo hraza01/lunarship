@@ -1,21 +1,19 @@
 'use client'
 import { useState } from 'react'
-import Overview from '@/app/(app)/app/account/Overview'
+import Overview from '@/app/(app)/app/account/General'
 import Settings from '@/app/(app)/app/account/Settings'
-import Funding from '@/app/(app)/app/account/Settings'
-
+import Funding from '@/app/(app)/app/account/(funding)/Funding'
 const tabs = [
-  { name: 'Overview', href: '#' },
   { name: 'Funding', href: '#' },
+  { name: 'General', href: '#' },
   { name: 'Settings', href: '#' },
 ]
 
 export default function Account() {
-  const [page, setPage] = useState('overview')
+  const [page, setPage] = useState('funding')
 
   function tabClickHandler(e) {
     e.preventDefault()
-
     setPage(e.target.name.toLowerCase())
   }
 
@@ -32,7 +30,7 @@ export default function Account() {
               name='tabs'
               className='block w-full rounded-md border-none bg-white/5 py-2 pl-3 pr-10 text-base text-white shadow-sm ring-1 ring-inset ring-white/10 focus:ring-2 focus:ring-inset focus:ring-indigo-500 sm:text-sm'
               defaultValue={page}
-              onChange={(e) => setPage(e.target.value.toLowerCase())}
+              onChange={tabClickHandler}
             >
               {tabs.map((tab) => (
                 <option key={tab.name}>{tab.name}</option>
@@ -68,8 +66,8 @@ export default function Account() {
           </div>
         </div>
         <div className='bg-lunarship-gray-200 p-6'>
-          {page === 'overview' && <Overview />}
           {page === 'funding' && <Funding />}
+          {page === 'general' && <Overview />}
           {page === 'settings' && <Settings />}
         </div>
       </div>

@@ -1,6 +1,6 @@
 import { PhotoIcon, UserCircleIcon } from '@heroicons/react/24/solid'
 
-export default function Funding() {
+export default function General() {
   return (
     <div className='space-y-10 divide-y divide-gray-900/10 bg-lunarship-gray-200 px-2'>
       <div className='grid grid-cols-1 gap-x-8 gap-y-8 md:grid-cols-3'>
