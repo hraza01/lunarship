@@ -66,7 +66,7 @@ export default function Nav() {
         </div>
         <div className='hidden lg:ml-12 lg:flex lg:justify-end'>
           <Link
-            href='/app'
+            href='/login'
             className='rounded-md bg-indigo-500 px-3.5 py-2.5 text-sm font-semibold text-white shadow-sm duration-300 ease-in-out hover:bg-indigo-400 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-400'
           >
             Log in <span aria-hidden='true'>&rarr;</span>
@@ -114,7 +114,7 @@ export default function Nav() {
               </div>
               <div className='py-6'>
                 <Link
-                  href='#'
+                  href='/login'
                   className='rounded-md bg-indigo-600 px-3.5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600'
                 >
                   Log in
