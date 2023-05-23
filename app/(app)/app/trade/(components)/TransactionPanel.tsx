@@ -1,7 +1,7 @@
 'use client'
 import { useState } from 'react'
 import { Tab } from '@headlessui/react'
-import Notification from '@/app/(app)/app/trade/(components)/Notification'
+import Notification from '@app/trade/(components)/Notification'
 
 function classNames(...classes: any[]) {
   return classes.filter(Boolean).join(' ')
