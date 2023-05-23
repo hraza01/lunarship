@@ -1,6 +1,6 @@
 import { Titillium_Web } from 'next/font/google'
-import Nav from '@/app/(app)/app/Nav'
-import Search from '@/app/(app)/app/Search'
+import Nav from '@app/(components)/Nav'
+import Search from '@app/(components)/Search'
 
 const titillium = Titillium_Web({
   weight: ['400', '600', '700'],

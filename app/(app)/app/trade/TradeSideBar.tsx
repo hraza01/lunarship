@@ -1,6 +1,6 @@
-import TickerInformation from '@/app/(app)/app/trade/(components)/TickerInformation'
-import TransactionPanel from '@/app/(app)/app/trade/(components)/TransactionPanel'
-import MarketData from '@/app/(app)/app/trade/(components)/MarketData'
+import TickerInformation from '@app/trade/(components)/TickerInformation'
+import TransactionPanel from '@app/trade/(components)/TransactionPanel'
+import MarketData from '@app/trade/(components)/MarketData'
 
 export default function TradeSideBar({ ticker }) {
   return (

@@ -1,5 +1,5 @@
-import MobileNav from '@/components/MobileNav'
-import DesktopNav from '@/components/DesktopNav'
+import MobileNav from '@app/(components)/MobileNav'
+import DesktopNav from '@app/(components)/DesktopNav'
 
 export default function Nav() {
   return (

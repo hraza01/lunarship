@@ -1,6 +1,6 @@
 import { Heebo } from 'next/font/google'
-import Nav from '@/app/(web)/Nav'
-import Footer from '@/app/(web)/Footer'
+import Nav from '@web/(components)/Nav'
+import Footer from '@web/(components)/Footer'
 
 const heebo = Heebo({ subsets: ['latin'] })
 

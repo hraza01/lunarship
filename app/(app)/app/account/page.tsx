@@ -1,8 +1,9 @@
 'use client'
 import { useState } from 'react'
-import Overview from '@/app/(app)/app/account/General'
-import Settings from '@/app/(app)/app/account/Settings'
-import Funding from '@/app/(app)/app/account/(funding)/Funding'
+import Overview from '@app/account/General'
+import Settings from '@app/account/Settings'
+import Funding from '@app/account/(funding)/Funding'
+
 const tabs = [
   { name: 'Funding', href: '#' },
   { name: 'General', href: '#' },

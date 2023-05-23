@@ -6,7 +6,7 @@ import { MagnifyingGlassIcon } from '@heroicons/react/20/solid'
 import { ExclamationCircleIcon } from '@heroicons/react/24/outline'
 import { getAssetLogo } from '@/utils/helpers'
 
-function classNames(...classes) {
+function classNames(...classes: any[]) {
   return classes.filter(Boolean).join(' ')
 }
 
@@ -31,7 +31,7 @@ export default function Search() {
   ]
 
   useEffect(() => {
-    function onKeyDown(e) {
+    function onKeyDown(e: any) {
       if (e.key === 'k' && (e.metaKey || e.ctrlKey)) {
         setOpen(!open)
       }

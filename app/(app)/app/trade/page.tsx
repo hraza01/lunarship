@@ -1,5 +1,5 @@
-import Chart from '@/app/(app)/app/trade/Chart'
-import TradeSideBar from '@/app/(app)/app/trade/TradeSideBar'
+import Chart from '@app/trade/Chart'
+import TradeSideBar from '@app/trade/TradeSideBar'
 
 export default function Trade({ searchParams }) {
   const ticker = searchParams.ticker || 'AAPL'

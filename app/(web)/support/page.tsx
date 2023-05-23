@@ -1,4 +1,4 @@
-import Accordion from '@/components/Accordion'
+import Accordion from '@web/(components)/Accordion'
 import {
   LifebuoyIcon,
   NewspaperIcon,
