@@ -1,7 +1,7 @@
 'use client'
 import { useState } from 'react'
-import Overview from '@app/account/General'
-import Settings from '@app/account/Settings'
+import Overview from '@app/account/(general)/General'
+import Settings from '@app/account/(settings)/Settings'
 import Funding from '@app/account/(funding)/Funding'
 
 const tabs = [
