@@ -1,39 +1,43 @@
 const transactions = [
   {
-    id: 'AAPS0L',
-    company: 'Chase & Co.',
-    share: 'CAC',
-    commission: '+$4.37',
-    price: '$3,509.00',
-    quantity: '12.00',
-    netAmount: '$4,397.00',
+    id: 'May 21, 2023',
+    timestamp: 'May 21, 2023',
+    type: 'US Equity',
+    relationship_name: 'ACH',
+    direction: 'INCOMING',
+    requested_amount: '$3,509.00',
+    amount: '$3,509.00',
+    status: 'COMPLETED',
   },
   {
-    id: 'AAPS0L',
-    company: 'Chase & Co.',
-    share: 'CAC',
-    commission: '+$4.37',
-    price: '$3,509.00',
-    quantity: '12.00',
-    netAmount: '$4,397.00',
+    id: 'May 22, 2023',
+    timestamp: 'May 22, 2023',
+    type: 'US Equity',
+    relationship_name: 'ACH',
+    direction: 'INCOMING',
+    requested_amount: '$3,509.00',
+    amount: '$3,509.00',
+    status: 'COMPLETED',
   },
   {
-    id: 'AAPS0L',
-    company: 'Chase & Co.',
-    share: 'CAC',
-    commission: '+$4.37',
-    price: '$3,509.00',
-    quantity: '12.00',
-    netAmount: '$4,397.00',
+    id: 'May 23, 2023',
+    timestamp: 'May 23, 2023',
+    type: 'US Equity',
+    relationship_name: 'ACH',
+    direction: 'INCOMING',
+    requested_amount: '$3,509.00',
+    amount: '$3,509.00',
+    status: 'COMPLETED',
   },
   {
-    id: 'AAPS0L',
-    company: 'Chase & Co.',
-    share: 'CAC',
-    commission: '+$4.37',
-    price: '$3,509.00',
-    quantity: '12.00',
-    netAmount: '$4,397.00',
+    id: 'May 24, 2023',
+    timestamp: 'May 24, 2023',
+    type: 'US Equity',
+    relationship_name: 'ACH',
+    direction: 'INCOMING',
+    requested_amount: '$3,509.00',
+    amount: '$3,509.00',
+    status: 'COMPLETED',
   },
   // More transactions...
 ]
@@ -105,25 +109,25 @@ export default function TransfersList() {
                 {transactions.map((transaction) => (
                   <tr key={transaction.id}>
                     <td className='whitespace-nowrap py-2 pl-4 pr-3 text-sm'>
-                      {transaction.id}
+                      {transaction.timestamp}
                     </td>
                     <td className='whitespace-nowrap px-2 py-2 text-sm font-medium '>
-                      {transaction.company}
+                      {transaction.type}
                     </td>
                     <td className='whitespace-nowrap px-2 py-2 text-sm '>
-                      {transaction.share}
+                      {transaction.relationship_name}
                     </td>
                     <td className='whitespace-nowrap px-2 py-2 text-sm'>
-                      {transaction.commission}
+                      {transaction.direction}
                     </td>
                     <td className='whitespace-nowrap px-2 py-2 text-sm'>
-                      {transaction.price}
+                      {transaction.requested_amount}
                     </td>
                     <td className='whitespace-nowrap px-2 py-2 text-sm'>
-                      {transaction.quantity}
+                      {transaction.amount}
                     </td>
                     <td className='whitespace-nowrap px-2 py-2 pr-4 text-right text-sm'>
-                      {transaction.netAmount}
+                      {transaction.status}
                     </td>
                   </tr>
                 ))}
