@@ -8,7 +8,7 @@ const titillium = Titillium_Web({
 })
 
 export const metadata = {
-  title: 'Lunarship',
+  title: 'Lunarship - App',
   description: 'The next gen trading app',
 }
 

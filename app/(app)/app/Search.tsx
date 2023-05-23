@@ -10,8 +10,6 @@ function classNames(...classes) {
   return classes.filter(Boolean).join(' ')
 }
 
-// const items = await getData()
-
 export default function Search() {
   const router = useRouter()
 
