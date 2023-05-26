@@ -1,14 +1,8 @@
 'use client'
 import { createChart, CrosshairMode } from 'lightweight-charts'
-import { useEffect, useRef, useState } from 'react'
-import { format, fromUnixTime } from 'date-fns'
-import { Spinner } from 'flowbite-react'
+import { useEffect, useRef } from 'react'
 
-// @ts-ignore
-export default function Chart({ accountId }) {
-  const [loading, setLoading] = useState(true)
-  const [accountBalance, setAccountBalance] = useState([])
-
+export default function Chart({ data }) {
   const chartContainerRef = useRef()
 
   useEffect(() => {
@@ -53,6 +47,7 @@ export default function Chart({ accountId }) {
       topColor: '#4338ca',
       bottomColor: 'transparent',
     })
+    newSeries.setData(data)
 
     newSeries.priceScale().applyOptions({
       autoScale: false,
@@ -62,26 +57,6 @@ export default function Chart({ accountId }) {
       },
     })
 
-    async function getAccountBalance() {
-      const res = await fetch(
-        `${process.env.NEXT_PUBLIC_HOST}/api/account/${accountId}/portfolio`
-      )
-      const data = await res.json()
-
-      setAccountBalance(
-        data.timestamp.map((day, index) => {
-          return {
-            time: format(fromUnixTime(day), 'yyyy-MM-dd'),
-            value: Number(data.equity[index]),
-          }
-        })
-      )
-
-      setLoading(false)
-    }
-
-    getAccountBalance().then(() => newSeries.setData(accountBalance))
-
     window.addEventListener('resize', handleResize)
 
     return () => {
@@ -89,20 +64,7 @@ export default function Chart({ accountId }) {
 
       chart.remove()
     }
-  }, [accountId])
+  }, [data])
 
-  if (loading) {
-    return (
-      <Spinner color='purple' aria-label='Purple spinner example' size='lg' />
-    )
-  }
-
-  return (
-    <div className='flex w-full flex-col gap-2'>
-      <h3 className='font-bold'>Account Balance</h3>
-      <div className='h-[24rem] w-full grow rounded bg-white/5 p-4'>
-        <div className='h-full' ref={chartContainerRef} />
-      </div>
-    </div>
-  )
+  return <div className='h-full' ref={chartContainerRef} />
 }

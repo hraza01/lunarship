@@ -1,7 +1,7 @@
-import Stats from '@/app/(app)/app/(dashboard)/Stats'
-import Chart from '@/app/(app)/app/(dashboard)/Chart'
-import AccountInformation from '@/app/(app)/app/(dashboard)/AccountInformation'
-import News from '@/app/(app)/app/(dashboard)/News'
+import Stats from '@app/(dashboard)/Stats'
+import AccountBalance from '@app/(dashboard)/AccountBalance'
+import AccountInformation from '@app/(dashboard)/AccountInformation'
+import News from '@app/(dashboard)/News'
 
 export default function Dashboard() {
   // will be retrieved at login
@@ -12,7 +12,7 @@ export default function Dashboard() {
       <div className='flex h-full w-full flex-col gap-8 p-4'>
         <Stats accountId={accountId} />
         <div className='flex flex-col gap-4 lg:grid lg:grid-cols-2'>
-          {/*<Chart accountId={accountId} />*/}
+          <AccountBalance accountId={accountId} />
           <AccountInformation accountId={accountId} />
           <News />
         </div>

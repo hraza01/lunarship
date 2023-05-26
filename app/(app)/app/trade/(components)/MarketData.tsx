@@ -2,63 +2,59 @@
 import { useEffect, useState } from 'react'
 import RecentTransactions from '@app/trade/(components)/RecentTransactions'
 import QuotesPanel from '@app/trade/(components)/QuotesPanel'
+import useWebSocket from 'react-use-websocket'
 
+const WSS_FEED_URL: string = process.env.NEXT_PUBLIC_ALPACA_WS
 export default function MarketData({ ticker }) {
-  // const [isConnected, setIsConnected] = useState(false)
-  // const [isAuthenticated, setIsAuthenticated] = useState(false)
   const [transactions, setTransactions] = useState([])
   const [quotes, setQuotes] = useState([])
 
-  useEffect(() => {
-    // messages
-    const authenticate = {
-      action: 'auth',
-      key: process.env.NEXT_PUBLIC_ALPACA_API_KEY,
-      secret: process.env.NEXT_PUBLIC_ALPACA_API_SECRET,
-    }
+  const authenticate = {
+    action: 'auth',
+    key: process.env.NEXT_PUBLIC_ALPACA_API_KEY,
+    secret: process.env.NEXT_PUBLIC_ALPACA_API_SECRET,
+  }
 
-    const subscribe = JSON.stringify({
-      action: 'subscribe',
-      trades: [ticker],
-      quotes: [ticker],
-    })
+  const subscribe = {
+    action: 'subscribe',
+    trades: [ticker],
+    quotes: [ticker],
+  }
 
-    const unsubscribe = JSON.stringify({
-      action: 'unsubscribe',
-      trades: [ticker],
-      quotes: [ticker],
-    })
+  const unsubscribe = {
+    action: 'unsubscribe',
+    trades: [ticker],
+    quotes: [ticker],
+  }
 
-    // socket init on mount
-    const socket = new WebSocket(process.env.NEXT_PUBLIC_ALPACA_WS)
+  function onOpen() {
+    console.log('WebSocket connection opened.')
+    sendJsonMessage(authenticate)
+  }
 
-    socket.onopen = function () {
-      socket.send(JSON.stringify(authenticate))
-    }
+  const { sendJsonMessage, getWebSocket } = useWebSocket(WSS_FEED_URL, {
+    onOpen: onOpen,
+    onClose: () => console.log('WebSocket connection closed.'),
+    shouldReconnect: (closeEvent) => true,
+    onMessage: async (event: WebSocketEventMap['message']) => {
+      const message = await JSON.parse(event.data)
+      console.log(message)
 
-    socket.onerror = function () {
-      throw Error('Websocket connection error')
-    }
-
-    socket.onmessage = async function (event) {
-      const response = await JSON.parse(event.data)
-      console.log(response[0])
-
-      response[0].T === 't' &&
+      message[0].T === 't' &&
         // @ts-ignore
         setTransactions((prevState: any[]) => [...response, ...prevState])
 
-      response[0].T === 'q' &&
+      message[0].T === 'q' &&
         // @ts-ignore
         setQuotes((prevState: any[]) => [...response, ...prevState])
-    }
+    },
+  })
 
-    socket.readyState === 1 && socket.send(subscribe)
+  useEffect(() => {
+    sendJsonMessage(subscribe)
 
     return () => {
-      // socket closure on unmount
-      // @ts-ignore
-      socket.readyState === 1 && socket.send(unsubscribe) && socket.close()
+      sendJsonMessage(unsubscribe)
     }
   }, [ticker])
 
