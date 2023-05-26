@@ -1,5 +1,5 @@
-import TransfersList from '@/app/(app)/app/account/(funding)/(transfers)/TransfersList'
-import TransfersForm from '@/app/(app)/app/account/(funding)/(transfers)/TransfersForm'
+import TransfersList from '@app/account/(funding)/(transfers)/TransfersList'
+import TransfersForm from '@app/account/(funding)/(transfers)/TransfersForm'
 
 export default function Transfers() {
   return (

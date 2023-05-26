@@ -1,5 +1,5 @@
-import BankList from '@/app/(app)/app/account/(funding)/(relationships)/BankList'
-import AchList from '@/app/(app)/app/account/(funding)/(relationships)/AchList'
+import BankList from '@app/account/(funding)/(relationships)/BankList'
+import AchList from '@app/account/(funding)/(relationships)/AchList'
 
 export default function Relationships() {
   return (
