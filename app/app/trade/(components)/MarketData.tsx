@@ -38,15 +38,14 @@ export default function MarketData({ ticker }) {
     shouldReconnect: (closeEvent) => true,
     onMessage: async (event: WebSocketEventMap['message']) => {
       const message = await JSON.parse(event.data)
-      console.log(message)
 
       message[0].T === 't' &&
         // @ts-ignore
-        setTransactions((prevState: any[]) => [...response, ...prevState])
+        setTransactions((prevState: any[]) => [...message, ...prevState])
 
       message[0].T === 'q' &&
         // @ts-ignore
-        setQuotes((prevState: any[]) => [...response, ...prevState])
+        setQuotes((prevState: any[]) => [...message, ...prevState])
     },
   })
 
