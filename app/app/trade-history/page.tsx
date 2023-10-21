@@ -2,7 +2,8 @@ import { parseISO, format } from 'date-fns'
 
 async function getTradeHistory(accountId) {
   const res = await fetch(
-    `${process.env.NEXT_PUBLIC_HOST}/api/trading/${accountId}`
+    `${process.env.NEXT_PUBLIC_HOST}/api/trading/${accountId}`,
+    { cache: 'no-store' }
   )
   return res.json()
 }

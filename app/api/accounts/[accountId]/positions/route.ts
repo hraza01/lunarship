@@ -10,10 +10,10 @@ export async function GET(
   {
     params,
   }: {
-    params: { symbol: string }
+    params: { accountId: string }
   }
 ) {
-  const url = `${process.env.NEXT_PUBLIC_ALPACA_URL}/v1/assets/${params.symbol}`
+  const url = `${process.env.NEXT_PUBLIC_ALPACA_URL}/v1/trading/accounts/${params.accountId}/positions`
   const options = {
     method: 'GET',
     headers: {

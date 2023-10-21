@@ -2,7 +2,7 @@ import { formatNumber } from '@/utils/helpers'
 
 async function getAccountInformation(accountId: string) {
   const res = await fetch(
-    `${process.env.NEXT_PUBLIC_HOST}/api/account/${accountId}`
+    `${process.env.NEXT_PUBLIC_HOST}/api/accounts/${accountId}`
   )
   return res.json()
 }

@@ -5,7 +5,7 @@ import Chart from '@app/(dashboard)/Chart'
 
 async function getAccountBalance(accountId) {
   const res = await fetch(
-    `${process.env.NEXT_PUBLIC_HOST}/api/account/${accountId}/portfolio`
+    `${process.env.NEXT_PUBLIC_HOST}/api/accounts/${accountId}/portfolio`
   )
 
   const data = await res.json()

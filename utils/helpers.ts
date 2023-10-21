@@ -15,11 +15,14 @@ export async function getAssetLogo(ticker: String) {
     )}`
   )
   const data = await res.json()
+  console.log(data)
 
-  return (
+  if (data.results.branding) {
     // @ts-ignore
-    `${data?.results.branding.logo_url}?${new URLSearchParams({
+    return `${data?.results.branding.logo_url}?${new URLSearchParams({
       apiKey: process.env.NEXT_PUBLIC_POLYGON_API_KEY,
-    })}` || '#'
-  )
+    })}`
+  }
+
+  return '#'
 }

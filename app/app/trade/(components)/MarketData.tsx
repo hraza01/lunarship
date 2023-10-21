@@ -28,7 +28,6 @@ export default function MarketData({ ticker }) {
   }
 
   function onOpen() {
-    console.log('WebSocket connection opened.')
     sendJsonMessage(authenticate)
   }
 

@@ -4,31 +4,18 @@ import { useRouter } from 'next/navigation'
 import { Combobox, Dialog, Transition } from '@headlessui/react'
 import { MagnifyingGlassIcon } from '@heroicons/react/20/solid'
 import { ExclamationCircleIcon } from '@heroicons/react/24/outline'
-import { getAssetLogo } from '@/utils/helpers'
 
 function classNames(...classes: any[]) {
   return classes.filter(Boolean).join(' ')
 }
 
-export default function Search() {
+export default function Search({ items }: any) {
   const router = useRouter()
-
   const [open, setOpen] = useState(false)
-  const [items, setItems] = useState([])
   const [query, setQuery] = useState('')
+  const [filteredItems, setFilteredItems] = useState([])
 
-  const tickers = [
-    'AAPL',
-    'AMZN',
-    'BTCUSD',
-    'F',
-    'GE',
-    'META',
-    'MSFT',
-    'NFLX',
-    'NVDA',
-    'TSLA',
-  ]
+  sessionStorage.setItem('items', JSON.stringify(items))
 
   useEffect(() => {
     function onKeyDown(e: any) {
@@ -36,22 +23,6 @@ export default function Search() {
         setOpen(!open)
       }
     }
-
-    async function getAssets() {
-      const res = await fetch('/api/assets')
-      const data = await res.json()
-
-      const filteredData = data.filter(({ symbol }) => tickers.includes(symbol))
-
-      for (const ticker of filteredData) {
-        ticker.url = await getAssetLogo(ticker.symbol)
-      }
-
-      setItems(filteredData)
-    }
-
-    !items.length && getAssets()
-
     window.addEventListener('keydown', onKeyDown)
 
     return () => {
@@ -59,15 +30,49 @@ export default function Search() {
     }
   }, [open])
 
-  const filteredItems =
-    query === ''
-      ? []
-      : items.filter((item) => {
-          return (
-            item.name.toLowerCase().includes(query.toLowerCase()) ||
-            item.symbol.toLowerCase().includes(query.toLowerCase())
-          )
-        })
+  useEffect(() => {
+    if (query && query !== '') {
+      // @ts-ignore
+      async function getAssets() {
+        // @ts-ignore
+        // const assets = await JSON.parse(sessionStorage.getItem('items'))
+
+        const filteredItem = await items.filter(
+          (item: any) => item.symbol.toLowerCase() === query.toLowerCase()
+        )
+
+        const filteredItems = await items
+          .filter((item: any) => {
+            return (
+              item.symbol.toLowerCase() !== query.toLowerCase() &&
+              (item.symbol.toLowerCase().includes(query.toLowerCase()) ||
+                item.name.toLowerCase().includes(query.toLowerCase()))
+            )
+          })
+          .slice(0, 10)
+          .sort((a: any, b: any) => a.symbol.localeCompare(b.symbol))
+
+        // @ts-ignore
+        setFilteredItems([...filteredItem, ...filteredItems])
+      }
+
+      getAssets()
+    }
+  }, [query])
+
+  const handleSearchQuery = (e: any) => {
+    e.target.value.length >= 2 && setQuery(e.target.value)
+  }
+
+  // const filteredItems =
+  //   query === ''
+  //     ? []
+  //     : items.filter((item) => {
+  //         return (
+  //           // item.name.toLowerCase().includes(query.toLowerCase()) ||
+  //           item.symbol.toLowerCase().includes(query.toLowerCase())
+  //         )
+  //       })
 
   return (
     <Transition.Root
@@ -114,7 +119,7 @@ export default function Search() {
                   <Combobox.Input
                     className='h-12 w-full border-0 bg-transparent pl-11 pr-4 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm'
                     placeholder='Search a symbol...'
-                    onChange={(event) => setQuery(event.target.value)}
+                    onChange={handleSearchQuery}
                   />
                 </div>
 
@@ -129,36 +134,47 @@ export default function Search() {
                         value={item}
                         className={({ active }) =>
                           classNames(
-                            'flex cursor-default select-none items-center rounded-xl p-3',
+                            'cursor-default select-none items-center rounded-xl p-3',
                             active && 'bg-gray-100'
                           )
                         }
                       >
                         {({ active }) => (
                           <>
-                            <div className='flex h-7 w-7 items-center justify-center rounded-lg'>
-                              <img
-                                src={item.url}
-                                className='w-full object-contain'
-                                alt='company logo'
-                              />
-                            </div>
-                            <div className='ml-4 flex-auto'>
+                            <p
+                              className={classNames(
+                                'p-1 text-sm font-medium',
+                                active ? 'text-gray-900' : 'text-gray-700'
+                              )}
+                            >
+                              {item.symbol}
+                            </p>
+                            <div className='flex gap-2'>
                               <p
                                 className={classNames(
-                                  'text-sm font-medium',
-                                  active ? 'text-gray-900' : 'text-gray-700'
-                                )}
-                              >
-                                {item.symbol}
-                              </p>
-                              <p
-                                className={classNames(
-                                  'text-sm',
+                                  'p-1 text-sm',
                                   active ? 'text-gray-700' : 'text-gray-500'
                                 )}
                               >
-                                {item.name}
+                                {item.name.length > 40
+                                  ? `${item.name.slice(0, 60)} ...`
+                                  : item.name}
+                              </p>
+                              <p
+                                className={classNames(
+                                  'ml-auto rounded bg-gray-200 px-2 py-1 text-sm uppercase',
+                                  active ? 'text-gray-700' : 'text-gray-500'
+                                )}
+                              >
+                                {item.exchange}
+                              </p>
+                              <p
+                                className={classNames(
+                                  'rounded bg-gray-200 px-2 py-1 text-sm uppercase',
+                                  active ? 'text-gray-700' : 'text-gray-500'
+                                )}
+                              >
+                                {item.class.replace('_', ' ')}
                               </p>
                             </div>
                           </>
