@@ -15,8 +15,6 @@ export default function Search({ items }: any) {
   const [query, setQuery] = useState('')
   const [filteredItems, setFilteredItems] = useState([])
 
-  sessionStorage.setItem('items', JSON.stringify(items))
-
   useEffect(() => {
     function onKeyDown(e: any) {
       if (e.key === 'k' && (e.metaKey || e.ctrlKey)) {
@@ -35,8 +33,6 @@ export default function Search({ items }: any) {
       // @ts-ignore
       async function getAssets() {
         // @ts-ignore
-        // const assets = await JSON.parse(sessionStorage.getItem('items'))
-
         const filteredItem = await items.filter(
           (item: any) => item.symbol.toLowerCase() === query.toLowerCase()
         )
@@ -50,7 +46,6 @@ export default function Search({ items }: any) {
             )
           })
           .slice(0, 10)
-          .sort((a: any, b: any) => a.symbol.localeCompare(b.symbol))
 
         // @ts-ignore
         setFilteredItems([...filteredItem, ...filteredItems])
@@ -58,7 +53,7 @@ export default function Search({ items }: any) {
 
       getAssets()
     }
-  }, [query])
+  }, [items, query])
 
   const handleSearchQuery = (e: any) => {
     e.target.value.length >= 2 && setQuery(e.target.value)
