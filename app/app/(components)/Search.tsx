@@ -56,7 +56,7 @@ export default function Search({ items }: any) {
   }, [items, query])
 
   const handleSearchQuery = (e: any) => {
-    e.target.value.length >= 2 && setQuery(e.target.value)
+    e.target.value.length >= 1 && setQuery(e.target.value)
   }
 
   return (
