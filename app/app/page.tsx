@@ -21,7 +21,7 @@ async function getAssets() {
 
 export default async function Dashboard() {
   // will be retrieved at login
-  const accountId = '0d178bce-9019-40c3-9841-29544381d812'
+  const accountId = process.env.NEXT_PUBLIC_TEST_ACCOUNT_ID
   const assets = await getAssets()
 
   return (
