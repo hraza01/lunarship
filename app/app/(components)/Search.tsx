@@ -59,16 +59,6 @@ export default function Search({ items }: any) {
     e.target.value.length >= 2 && setQuery(e.target.value)
   }
 
-  // const filteredItems =
-  //   query === ''
-  //     ? []
-  //     : items.filter((item) => {
-  //         return (
-  //           // item.name.toLowerCase().includes(query.toLowerCase()) ||
-  //           item.symbol.toLowerCase().includes(query.toLowerCase())
-  //         )
-  //       })
-
   return (
     <Transition.Root
       show={open}
