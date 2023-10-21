@@ -12,6 +12,8 @@ import {
   CalendarDaysIcon,
   UsersIcon,
 } from '@heroicons/react/24/outline'
+import Image from 'next/image'
+import appImage from '@/assets/app-preview.jpg'
 
 const primaryFeatures = [
   {
@@ -200,14 +202,14 @@ export default function Home() {
                 </a>
               </div>
             </div>
-            <div className='mx-auto mt-16 flex max-w-2xl sm:mt-24 lg:ml-10 lg:mr-0 lg:mt-0 lg:max-w-none lg:flex-none xl:ml-32'>
+            <div className='mx-auto mt-16 flex max-w-2xl items-start sm:mt-24 lg:ml-10 lg:mr-0 lg:mt-0 lg:max-w-none lg:flex-none'>
               <div className='max-w-3xl flex-none sm:max-w-5xl lg:max-w-none'>
-                <img
-                  src='https://tailwindui.com/img/component-images/dark-project-app-screenshot.png'
+                <Image
+                  src={appImage}
                   alt='App screenshot'
                   width={2432}
                   height={1442}
-                  className='w-[76rem] rounded-md bg-white/5 shadow-2xl ring-1 ring-white/10'
+                  className='w-[54rem] rounded-md bg-white/5 shadow-2xl ring-1 ring-white/10'
                 />
               </div>
             </div>
@@ -320,15 +322,15 @@ export default function Home() {
           </div>
           <div className='relative overflow-hidden pt-16'>
             <div className='mx-auto max-w-screen-2xl px-6 lg:px-8'>
-              <img
-                src='https://tailwindui.com/img/component-images/dark-project-app-screenshot.png'
+              <Image
+                src={appImage}
                 alt='App screenshot'
                 className='mb-[-12%] rounded-xl shadow-2xl ring-1 ring-white/10'
                 width={2432}
                 height={1442}
               />
               <div className='relative' aria-hidden='true'>
-                <div className='absolute -inset-x-20 bottom-0 bg-gradient-to-t from-gray-900 pt-[7%]' />
+                <div className='absolute -inset-x-20 bottom-0 bg-gradient-to-t from-gray-900 pt-[40%]' />
               </div>
             </div>
           </div>
